@@ -89,6 +89,20 @@ if (fs.existsSync(pingTargetsFile)) {
   fs.writeFileSync(pingTargetsFile, JSON.stringify(pingTargets, null, 2));
 }
 
+// Ping history storage (1 month retention)
+const pingHistoryFile = './ping-history.json';
+let pingHistory = {};
+if (fs.existsSync(pingHistoryFile)) {
+  try {
+    pingHistory = JSON.parse(fs.readFileSync(pingHistoryFile, 'utf8'));
+  } catch (err) {
+    console.error('Error loading ping history, starting fresh:', err);
+    pingHistory = {};
+  }
+} else {
+  fs.writeFileSync(pingHistoryFile, JSON.stringify(pingHistory, null, 2));
+}
+
 // Helper function to save config
 function saveConfig() {
   fs.writeFileSync('./config.json', JSON.stringify(config, null, 2));
@@ -107,51 +121,65 @@ function savePingTargets() {
   console.log('Ping targets saved');
 }
 
-// Ping history configuration
-let pingHistory = {};
-const pingHistoryFile = './ping-history.json';
-
-// Load or create ping history file
-if (fs.existsSync(pingHistoryFile)) {
-  pingHistory = JSON.parse(fs.readFileSync(pingHistoryFile, 'utf8'));
-} else {
-  fs.writeFileSync(pingHistoryFile, JSON.stringify(pingHistory, null, 2));
-}
-
 // Helper function to save ping history
 function savePingHistory() {
   fs.writeFileSync(pingHistoryFile, JSON.stringify(pingHistory, null, 2));
 }
 
-// Function to cleanup old ping data (older than 30 days)
-function cleanupPingHistory() {
-  const thirtyDaysAgo = Date.now() - (30 * 24 * 60 * 60 * 1000);
-  let cleaned = false;
+// Helper function to add ping result to history
+function addPingToHistory(targetId, result) {
+  if (!pingHistory[targetId]) {
+    pingHistory[targetId] = {
+      targetId: targetId,
+      data: []
+    };
+  }
+  
+  pingHistory[targetId].data.push({
+    timestamp: new Date().toISOString(),
+    alive: result.alive,
+    time: result.time,
+    packetLoss: result.packetLoss
+  });
+  
+  // Save every 10 entries to reduce disk I/O
+  if (pingHistory[targetId].data.length % 10 === 0) {
+    savePingHistory();
+  }
+}
 
+// Helper function to cleanup old ping history (older than 1 month)
+function cleanupOldPingHistory() {
+  const oneMonthAgo = new Date();
+  oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+  
+  let cleaned = 0;
   Object.keys(pingHistory).forEach(targetId => {
     if (pingHistory[targetId] && pingHistory[targetId].data) {
       const originalLength = pingHistory[targetId].data.length;
       pingHistory[targetId].data = pingHistory[targetId].data.filter(entry => {
-        return new Date(entry.timestamp).getTime() > thirtyDaysAgo;
+        return new Date(entry.timestamp) > oneMonthAgo;
       });
-
-      if (pingHistory[targetId].data.length !== originalLength) {
-        cleaned = true;
+      cleaned += originalLength - pingHistory[targetId].data.length;
+      
+      // Remove target history if no data left
+      if (pingHistory[targetId].data.length === 0) {
+        delete pingHistory[targetId];
       }
     }
   });
-
-  if (cleaned) {
+  
+  if (cleaned > 0) {
     savePingHistory();
-    console.log('Ping history cleaned up - removed data older than 30 days');
+    console.log(`Cleaned up ${cleaned} old ping history entries`);
   }
 }
 
-// Run cleanup on startup
-cleanupPingHistory();
+// Cleanup old ping history on startup
+cleanupOldPingHistory();
 
-// Run cleanup every 24 hours
-setInterval(cleanupPingHistory, 24 * 60 * 60 * 1000);
+// Schedule cleanup every 24 hours
+setInterval(cleanupOldPingHistory, 24 * 60 * 60 * 1000);
 
 // Route for dashboard page
 app.get('/', (req, res) => {
@@ -310,35 +338,10 @@ app.post('/api/ping-test', async (req, res) => {
       min_reply: 1,
       extra: ['-c', '3'] // Send 3 packets
     });
-
-    // Store ping result in history if targetId is provided
+    
+    // Save to history if targetId provided
     if (targetId) {
-      if (!pingHistory[targetId]) {
-        pingHistory[targetId] = {
-          targetId: targetId,
-          data: []
-        };
-      }
-
-      pingHistory[targetId].data.push({
-        timestamp: new Date().toISOString(),
-        alive: result.alive,
-        time: result.time !== 'unknown' ? parseFloat(result.time) : null,
-        packetLoss: result.packetLoss
-      });
-
-      // Keep only last 30 days of data (cleanup will handle this, but limit array size for performance)
-      const thirtyDaysAgo = Date.now() - (30 * 24 * 60 * 60 * 1000);
-      pingHistory[targetId].data = pingHistory[targetId].data.filter(entry => {
-        return new Date(entry.timestamp).getTime() > thirtyDaysAgo;
-      });
-
-      // Limit to last 10000 entries per target for performance
-      if (pingHistory[targetId].data.length > 10000) {
-        pingHistory[targetId].data = pingHistory[targetId].data.slice(-10000);
-      }
-
-      savePingHistory();
+      addPingToHistory(targetId, result);
     }
     
     res.json({
@@ -355,70 +358,35 @@ app.post('/api/ping-test', async (req, res) => {
   }
 });
 
-// API endpoint to get ping history for charts
+// API to get ping history for a target
 app.get('/api/ping-history/:targetId', (req, res) => {
-  const { targetId } = req.params;
-  const { hours = 24 } = req.query; // Default to last 24 hours
-
-  if (!pingHistory[targetId]) {
-    return res.json({ success: true, data: [] });
-  }
-
-  const hoursAgo = Date.now() - (parseInt(hours) * 60 * 60 * 1000);
-  const filteredData = pingHistory[targetId].data.filter(entry => {
-    return new Date(entry.timestamp).getTime() > hoursAgo;
-  });
-
-  res.json({
-    success: true,
-    data: filteredData,
-    targetId: targetId
-  });
-});
-
-// API endpoint to get ping report
-app.get('/api/ping-report', (req, res) => {
-  const { days = 7 } = req.query; // Default to last 7 days
-  const daysAgo = Date.now() - (parseInt(days) * 24 * 60 * 60 * 1000);
-
-  const report = {};
-
-  Object.keys(pingHistory).forEach(targetId => {
-    const target = pingTargets.find(t => t.id == targetId);
-    if (!target) return;
-
-    const targetData = pingHistory[targetId].data.filter(entry => {
-      return new Date(entry.timestamp).getTime() > daysAgo;
+  try {
+    const targetId = parseInt(req.params.targetId);
+    const history = pingHistory[targetId] || { targetId, data: [] };
+    
+    // Optional: filter by time range
+    const { startDate, endDate } = req.query;
+    let filteredData = history.data;
+    
+    if (startDate || endDate) {
+      filteredData = history.data.filter(entry => {
+        const timestamp = new Date(entry.timestamp);
+        if (startDate && timestamp < new Date(startDate)) return false;
+        if (endDate && timestamp > new Date(endDate)) return false;
+        return true;
+      });
+    }
+    
+    res.json({
+      success: true,
+      targetId,
+      count: filteredData.length,
+      data: filteredData
     });
-
-    if (targetData.length === 0) return;
-
-    const totalPings = targetData.length;
-    const successfulPings = targetData.filter(entry => entry.alive).length;
-    const uptime = (successfulPings / totalPings) * 100;
-
-    const latencies = targetData.filter(entry => entry.time !== null).map(entry => entry.time);
-    const avgLatency = latencies.length > 0 ? latencies.reduce((a, b) => a + b, 0) / latencies.length : 0;
-
-    const packetLosses = targetData.map(entry => entry.packetLoss);
-    const avgPacketLoss = packetLosses.reduce((a, b) => a + b, 0) / packetLosses.length;
-
-    report[targetId] = {
-      target: target,
-      totalPings: totalPings,
-      successfulPings: successfulPings,
-      uptime: uptime.toFixed(2),
-      avgLatency: avgLatency.toFixed(2),
-      avgPacketLoss: avgPacketLoss.toFixed(2),
-      period: `${days} days`
-    };
-  });
-
-  res.json({
-    success: true,
-    report: report,
-    period: `${days} days`
-  });
+  } catch (err) {
+    console.error('Error retrieving ping history:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 // Route for login page
@@ -541,6 +509,39 @@ app.post('/api/settings', (req, res) => {
     });
   } catch (err) {
     console.error('Error updating settings:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// API to update ping notification settings
+app.post('/api/settings/ping-notifications', (req, res) => {
+  try {
+    const { enabled, notifyOnDown, notifyOnTimeout, notifyOnHighLatency, latencyThreshold } = req.body;
+    
+    if (!settings.pingNotifications) {
+      settings.pingNotifications = {};
+    }
+    
+    settings.pingNotifications.enabled = enabled !== undefined ? enabled : true;
+    settings.pingNotifications.notifyOnDown = notifyOnDown !== undefined ? notifyOnDown : true;
+    settings.pingNotifications.notifyOnTimeout = notifyOnTimeout !== undefined ? notifyOnTimeout : true;
+    settings.pingNotifications.notifyOnHighLatency = notifyOnHighLatency !== undefined ? notifyOnHighLatency : true;
+    
+    if (latencyThreshold !== undefined) {
+      if (latencyThreshold < 10 || latencyThreshold > 500) {
+        return res.status(400).json({ error: 'Latency threshold must be between 10 and 500 ms' });
+      }
+      settings.pingNotifications.latencyThreshold = latencyThreshold;
+    }
+    
+    saveSettings();
+    
+    res.json({
+      success: true,
+      pingNotifications: settings.pingNotifications
+    });
+  } catch (err) {
+    console.error('Error updating ping notification settings:', err);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });

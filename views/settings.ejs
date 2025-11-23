@@ -252,6 +252,85 @@
               </div>
               <p class="text-xs text-gray-500 mt-1">How often to ping network targets (5-300 seconds)</p>
             </div>
+
+            <!-- Ping Notifications -->
+            <div class="space-y-3">
+              <label class="block text-sm font-medium text-gray-300 mb-2">Ping Notifications</label>
+              
+              <div class="flex items-center justify-between bg-slate-700/30 rounded-lg p-3">
+                <div class="flex items-center gap-3">
+                  <i class="fas fa-bell text-yellow-400"></i>
+                  <div>
+                    <p class="text-sm font-medium text-white">Enable Notifications</p>
+                    <p class="text-xs text-gray-400">Show alerts for ping failures</p>
+                  </div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="ping-notifications-enabled" class="sr-only peer" <%= settings.pingNotifications?.enabled ? 'checked' : '' %>>
+                  <div class="w-11 h-6 bg-slate-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+
+              <div class="flex items-center justify-between bg-slate-700/30 rounded-lg p-3">
+                <div class="flex items-center gap-3">
+                  <i class="fas fa-exclamation-triangle text-red-400"></i>
+                  <div>
+                    <p class="text-sm font-medium text-white">Notify on Down</p>
+                    <p class="text-xs text-gray-400">Alert when target is offline</p>
+                  </div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="ping-notify-down" class="sr-only peer" <%= settings.pingNotifications?.notifyOnDown ? 'checked' : '' %>>
+                  <div class="w-11 h-6 bg-slate-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+
+              <div class="flex items-center justify-between bg-slate-700/30 rounded-lg p-3">
+                <div class="flex items-center gap-3">
+                  <i class="fas fa-clock text-orange-400"></i>
+                  <div>
+                    <p class="text-sm font-medium text-white">Notify on Timeout</p>
+                    <p class="text-xs text-gray-400">Alert when ping times out</p>
+                  </div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="ping-notify-timeout" class="sr-only peer" <%= settings.pingNotifications?.notifyOnTimeout ? 'checked' : '' %>>
+                  <div class="w-11 h-6 bg-slate-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+
+              <div class="flex items-center justify-between bg-slate-700/30 rounded-lg p-3">
+                <div class="flex items-center gap-3">
+                  <i class="fas fa-tachometer-alt text-yellow-400"></i>
+                  <div>
+                    <p class="text-sm font-medium text-white">Notify on High Latency</p>
+                    <p class="text-xs text-gray-400">Alert when latency exceeds threshold</p>
+                  </div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="ping-notify-high-latency" class="sr-only peer" <%= settings.pingNotifications?.notifyOnHighLatency ? 'checked' : '' %>>
+                  <div class="w-11 h-6 bg-slate-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+
+              <div class="bg-slate-700/30 rounded-lg p-3">
+                <label class="block text-sm font-medium text-gray-300 mb-2">Latency Threshold</label>
+                <div class="flex gap-2">
+                  <input type="number" 
+                         id="ping-latency-threshold"
+                         min="10" 
+                         step="5"
+                         value="<%= settings.pingNotifications?.latencyThreshold || 50 %>"
+                         class="flex-1 bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <span class="flex items-center text-gray-400">ms</span>
+                </div>
+                <p class="text-xs text-gray-500 mt-1">Alert when ping exceeds this value (10-500 ms)</p>
+              </div>
+
+              <button id="save-ping-notifications-btn" class="w-full px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-500 hover:to-green-600 transition-all font-medium text-sm">
+                <i class="fas fa-check mr-2"></i>Save Notification Settings
+              </button>
+            </div>
           </div>
 
           <!-- Divider -->
@@ -520,6 +599,54 @@
       } finally {
         savePingIntervalBtn.disabled = false;
         savePingIntervalBtn.innerHTML = '<i class="fas fa-check mr-1"></i>Save';
+      }
+    });
+
+    // Save ping notifications
+    const savePingNotificationsBtn = document.getElementById('save-ping-notifications-btn');
+    savePingNotificationsBtn.addEventListener('click', async function() {
+      const enabled = document.getElementById('ping-notifications-enabled').checked;
+      const notifyOnDown = document.getElementById('ping-notify-down').checked;
+      const notifyOnTimeout = document.getElementById('ping-notify-timeout').checked;
+      const notifyOnHighLatency = document.getElementById('ping-notify-high-latency').checked;
+      const latencyThreshold = parseInt(document.getElementById('ping-latency-threshold').value);
+
+      if (!latencyThreshold || latencyThreshold < 10 || latencyThreshold > 500) {
+        showToast('Latency threshold must be between 10 and 500 ms', 'warning');
+        return;
+      }
+
+      savePingNotificationsBtn.disabled = true;
+      savePingNotificationsBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
+
+      try {
+        const response = await fetch('/api/settings/ping-notifications', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            enabled,
+            notifyOnDown,
+            notifyOnTimeout,
+            notifyOnHighLatency,
+            latencyThreshold
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to update notification settings');
+        }
+
+        showToast('✓ Notification settings saved successfully', 'success');
+        
+        setTimeout(() => {
+          location.reload();
+        }, 1500);
+      } catch (err) {
+        console.error('Error:', err);
+        showToast('✗ Failed to save notification settings', 'error');
+      } finally {
+        savePingNotificationsBtn.disabled = false;
+        savePingNotificationsBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Save Notification Settings';
       }
     });
 

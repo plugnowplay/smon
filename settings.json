@@ -1,5 +1,12 @@
 {
   "pollingInterval": 60000,
   "dataRetention": 30,
-  "pingInterval": 30000
+  "pingInterval": 60000,
+  "pingNotifications": {
+    "enabled": true,
+    "notifyOnDown": true,
+    "notifyOnTimeout": true,
+    "notifyOnHighLatency": true,
+    "latencyThreshold": 50
+  }
 }
