@@ -180,6 +180,102 @@
                 <% } %>
             </div>
         </div>
+
+        <!-- Charts Section -->
+        <div class="mt-8 md:mt-12">
+            <div class="bg-slate-800 rounded-lg p-4 md:p-6 border border-slate-700 shadow-lg">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+                    <h2 class="text-xl md:text-2xl font-bold text-white flex items-center">
+                        <i class="fas fa-chart-line mr-3 text-blue-400"></i>
+                        Ping History Charts
+                    </h2>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <select id="chartTargetSelect" class="px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Select Target</option>
+                        </select>
+                        <select id="chartTimeRange" class="px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="1">Last Hour</option>
+                            <option value="6">Last 6 Hours</option>
+                            <option value="24" selected>Last 24 Hours</option>
+                            <option value="168">Last 7 Days</option>
+                            <option value="720">Last 30 Days</option>
+                        </select>
+                        <button onclick="loadChartData()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-all">
+                            <i class="fas fa-sync-alt mr-2"></i>Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Latency Chart -->
+                    <div class="bg-slate-700 rounded-lg p-4">
+                        <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+                            <i class="fas fa-clock mr-2 text-blue-400"></i>
+                            Latency (ms)
+                        </h3>
+                        <canvas id="latencyChart" width="400" height="200"></canvas>
+                    </div>
+
+                    <!-- Packet Loss Chart -->
+                    <div class="bg-slate-700 rounded-lg p-4">
+                        <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+                            <i class="fas fa-exclamation-triangle mr-2 text-yellow-400"></i>
+                            Packet Loss (%)
+                        </h3>
+                        <canvas id="packetLossChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+
+                <!-- Uptime Chart -->
+                <div class="mt-6 bg-slate-700 rounded-lg p-4">
+                    <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+                        <i class="fas fa-signal mr-2 text-green-400"></i>
+                        Uptime Status
+                    </h3>
+                    <canvas id="uptimeChart" width="400" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report Section -->
+        <div class="mt-8 md:mt-12">
+            <div class="bg-slate-800 rounded-lg p-4 md:p-6 border border-slate-700 shadow-lg">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+                    <h2 class="text-xl md:text-2xl font-bold text-white flex items-center">
+                        <i class="fas fa-file-alt mr-3 text-green-400"></i>
+                        Ping Report
+                    </h2>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <select id="reportPeriod" class="px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="1">Last 24 Hours</option>
+                            <option value="7" selected>Last 7 Days</option>
+                            <option value="30">Last 30 Days</option>
+                        </select>
+                        <button onclick="generateReport()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-all">
+                            <i class="fas fa-chart-bar mr-2"></i>Generate Report
+                        </button>
+                    </div>
+                </div>
+
+                <div id="reportContent" class="hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left text-gray-300">
+                            <thead class="text-xs text-gray-400 uppercase bg-slate-700">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">Target</th>
+                                    <th scope="col" class="px-6 py-3">Total Pings</th>
+                                    <th scope="col" class="px-6 py-3">Uptime</th>
+                                    <th scope="col" class="px-6 py-3">Avg Latency</th>
+                                    <th scope="col" class="px-6 py-3">Avg Packet Loss</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reportTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Add Target Modal -->
@@ -337,7 +433,7 @@
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ host: target.host })
+                    body: JSON.stringify({ host: target.host, targetId: targetId })
                 });
 
                 const result = await pingResponse.json();
@@ -480,6 +576,253 @@
                 console.error('Error toggling target:', error);
                 showToast('Failed to toggle target', 'error');
             }
+        }
+
+        // Chart variables
+        let latencyChart, packetLossChart, uptimeChart;
+
+        // Initialize charts and populate target select
+        document.addEventListener('DOMContentLoaded', function() {
+            startPingMonitoring();
+            initializeCharts();
+            populateTargetSelect();
+        });
+
+        function initializeCharts() {
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#e2e8f0'
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: '#94a3b8'
+                        },
+                        grid: {
+                            color: '#374151'
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            color: '#94a3b8'
+                        },
+                        grid: {
+                            color: '#374151'
+                        }
+                    }
+                }
+            };
+
+            // Latency Chart
+            const latencyCtx = document.getElementById('latencyChart').getContext('2d');
+            latencyChart = new Chart(latencyCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Latency (ms)',
+                        data: [],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    ...chartOptions,
+                    scales: {
+                        ...chartOptions.scales,
+                        y: {
+                            ...chartOptions.scales.y,
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Packet Loss Chart
+            const packetLossCtx = document.getElementById('packetLossChart').getContext('2d');
+            packetLossChart = new Chart(packetLossCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Packet Loss (%)',
+                        data: [],
+                        borderColor: '#f59e0b',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    ...chartOptions,
+                    scales: {
+                        ...chartOptions.scales,
+                        y: {
+                            ...chartOptions.scales.y,
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+
+            // Uptime Chart
+            const uptimeCtx = document.getElementById('uptimeChart').getContext('2d');
+            uptimeChart = new Chart(uptimeCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Status (1=Online, 0=Offline)',
+                        data: [],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.1,
+                        stepped: true
+                    }]
+                },
+                options: {
+                    ...chartOptions,
+                    scales: {
+                        ...chartOptions.scales,
+                        y: {
+                            ...chartOptions.scales.y,
+                            beginAtZero: true,
+                            max: 1,
+                            ticks: {
+                                ...chartOptions.scales.y.ticks,
+                                callback: function(value) {
+                                    return value === 1 ? 'Online' : 'Offline';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function populateTargetSelect() {
+            const select = document.getElementById('chartTargetSelect');
+            fetch('/api/ping-targets')
+                .then(response => response.json())
+                .then(targets => {
+                    targets.forEach(target => {
+                        const option = document.createElement('option');
+                        option.value = target.id;
+                        option.textContent = `${target.name} (${target.host})`;
+                        select.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error loading targets:', error));
+        }
+
+        async function loadChartData() {
+            const targetId = document.getElementById('chartTargetSelect').value;
+            const hours = document.getElementById('chartTimeRange').value;
+
+            if (!targetId) {
+                showToast('Please select a target', 'warning');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/ping-history/${targetId}?hours=${hours}`);
+                const result = await response.json();
+
+                if (result.success) {
+                    updateCharts(result.data);
+                    showToast('Chart data loaded successfully', 'success');
+                } else {
+                    showToast('Failed to load chart data', 'error');
+                }
+            } catch (error) {
+                console.error('Error loading chart data:', error);
+                showToast('Failed to load chart data', 'error');
+            }
+        }
+
+        function updateCharts(data) {
+            // Prepare data for charts
+            const labels = data.map(entry => {
+                const date = new Date(entry.timestamp);
+                return date.toLocaleString();
+            });
+
+            const latencyData = data.map(entry => entry.time);
+            const packetLossData = data.map(entry => entry.packetLoss);
+            const uptimeData = data.map(entry => entry.alive ? 1 : 0);
+
+            // Update Latency Chart
+            latencyChart.data.labels = labels;
+            latencyChart.data.datasets[0].data = latencyData;
+            latencyChart.update();
+
+            // Update Packet Loss Chart
+            packetLossChart.data.labels = labels;
+            packetLossChart.data.datasets[0].data = packetLossData;
+            packetLossChart.update();
+
+            // Update Uptime Chart
+            uptimeChart.data.labels = labels;
+            uptimeChart.data.datasets[0].data = uptimeData;
+            uptimeChart.update();
+        }
+
+        async function generateReport() {
+            const days = document.getElementById('reportPeriod').value;
+
+            try {
+                const response = await fetch(`/api/ping-report?days=${days}`);
+                const result = await response.json();
+
+                if (result.success) {
+                    displayReport(result.report);
+                    document.getElementById('reportContent').classList.remove('hidden');
+                    showToast('Report generated successfully', 'success');
+                } else {
+                    showToast('Failed to generate report', 'error');
+                }
+            } catch (error) {
+                console.error('Error generating report:', error);
+                showToast('Failed to generate report', 'error');
+            }
+        }
+
+        function displayReport(report) {
+            const tbody = document.getElementById('reportTableBody');
+            tbody.innerHTML = '';
+
+            Object.values(report).forEach(item => {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-slate-600 hover:bg-slate-700';
+                row.innerHTML = `
+                    <td class="px-6 py-4 font-medium text-white">
+                        ${item.target.name}<br>
+                        <span class="text-sm text-gray-400">${item.target.host}</span>
+                    </td>
+                    <td class="px-6 py-4">${item.totalPings}</td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 rounded-full text-xs font-medium ${parseFloat(item.uptime) >= 99 ? 'bg-green-900 text-green-200' : parseFloat(item.uptime) >= 95 ? 'bg-yellow-900 text-yellow-200' : 'bg-red-900 text-red-200'}">
+                            ${item.uptime}%
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">${item.avgLatency} ms</td>
+                    <td class="px-6 py-4">${item.avgPacketLoss}%</td>
+                `;
+                tbody.appendChild(row);
+            });
         }
     </script>
 </body>
