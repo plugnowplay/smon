@@ -10,20 +10,20 @@
 <body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-gray-100 min-h-screen">
   <div class="flex h-screen">
     <!-- Mobile Menu Button -->
-    <button id="mobile-menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-slate-800 p-2 rounded-lg border border-slate-700 shadow-lg">
-      <i class="fas fa-bars text-white"></i>
+    <button id="mobile-menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-gradient-to-br from-slate-800 to-slate-900 p-3 rounded-xl border border-slate-700/50 shadow-xl hover:shadow-2xl hover:border-slate-600/70 transition-all duration-300 group">
+      <i class="fas fa-bars text-white group-hover:scale-110 transition-transform duration-200"></i>
     </button>
 
     <!-- Mobile Overlay -->
-    <div id="mobile-overlay" class="md:hidden fixed inset-0 bg-black bg-opacity-50 z-30 hidden"></div>
+    <div id="mobile-overlay" class="md:hidden fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm z-30 hidden"></div>
 
     <!-- Sidebar -->
-    <div id="sidebar" class="w-64 bg-slate-950 border-r border-slate-700 shadow-xl flex flex-col fixed md:relative inset-y-0 left-0 z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
+    <div id="sidebar" class="w-64 bg-gradient-to-b from-slate-950 to-slate-900 border-r border-slate-700/50 shadow-2xl flex flex-col fixed md:relative inset-y-0 left-0 z-40 transform -translate-x-full md:translate-x-0 transition-all duration-300 ease-in-out">
       <!-- Header -->
-      <div class="p-6 border-b border-slate-700">
+      <div class="p-6 border-b border-slate-700/50 bg-gradient-to-r from-slate-900/50 to-slate-800/50">
         <div class="flex items-center gap-3 mb-1">
-          <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
-            <i class="fas fa-chart-line text-white font-bold text-lg"></i>
+          <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 group">
+            <i class="fas fa-chart-line text-white font-bold text-lg group-hover:scale-110 transition-transform duration-200"></i>
           </div>
           <div>
             <h1 class="text-lg font-bold text-white">SMon</h1>
@@ -35,76 +35,98 @@
       <!-- Navigation -->
       <nav class="flex-1 px-4 py-6 overflow-y-auto">
         <div class="space-y-2">
-          <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-slate-700 transition-all duration-200">
-            <i class="fas fa-chart-area w-5"></i>
+          <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-chart-area w-5 group-hover:scale-110 transition-transform duration-200"></i>
             <span>Dashboard</span>
           </a>
-          <a href="/monitoring" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-slate-700 transition-all duration-200">
-            <i class="fas fa-gauge-high w-5"></i>
+          <a href="/monitoring" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-gauge-high w-5 group-hover:scale-110 transition-transform duration-200"></i>
             <span>Bandwidth Monitor</span>
           </a>
-          <a href="/ping" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-slate-700 transition-all duration-200">
-            <i class="fas fa-network-wired w-5"></i>
+          <a href="/ping" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-network-wired w-5 group-hover:scale-110 transition-transform duration-200"></i>
             <span>Ping Monitor</span>
           </a>
-          <a href="/devices" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-slate-700 transition-all duration-200">
-            <i class="fas fa-server w-5"></i>
+          <a href="/devices" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-server w-5 group-hover:scale-110 transition-transform duration-200"></i>
             <span>Devices</span>
           </a>
-          <a href="/settings" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium transition-all hover:shadow-lg">
-            <i class="fas fa-cog w-5"></i>
+          <a href="/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium transition-all hover:shadow-lg hover:shadow-blue-500/25 hover:scale-[1.02] group">
+            <i class="fas fa-cog w-5 group-hover:scale-110 transition-transform duration-200"></i>
             <span>Settings</span>
           </a>
-          <a href="/about" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-slate-700 transition-all duration-200">
-            <i class="fas fa-info-circle w-5"></i>
+          <a href="/about" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-info-circle w-5 group-hover:scale-110 transition-transform duration-200"></i>
             <span>About</span>
           </a>
-          <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-lg text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all duration-200 mt-4">
-            <i class="fas fa-sign-out-alt w-5"></i>
+          <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-gradient-to-r hover:from-red-500/20 hover:to-red-600/20 hover:text-red-300 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] mt-4 group">
+            <i class="fas fa-sign-out-alt w-5 group-hover:scale-110 transition-transform duration-200"></i>
             <span>Logout</span>
           </a>
         </div>
       </nav>
 
       <!-- Footer -->
-      <div class="px-4 py-4 border-t border-slate-700">
+      <div class="px-4 py-4 border-t border-slate-700/50 bg-gradient-to-r from-slate-900/30 to-slate-800/30">
         <div class="text-xs text-gray-500 text-center">
-          <p>SNMP Monitor v2.0</p>
-          <p>Network Intelligence</p>
+          <p class="font-medium">SNMP Monitor v2.0</p>
+          <p class="text-gray-600">Network Intelligence</p>
         </div>
       </div>
     </div>
 
     <!-- Main Content -->
-    <div class="flex-1 overflow-auto">
+    <div class="flex-1 overflow-auto md:ml-0">
       <!-- Top Header -->
-      <div class="bg-slate-950 border-b border-slate-700 px-4 md:px-8 py-4 sticky top-0 z-10">
+      <div class="bg-gradient-to-r from-slate-950 to-slate-900 border-b border-slate-700/50 px-4 md:px-8 py-4 sticky top-0 z-20 shadow-xl">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <h2 class="text-2xl font-bold text-white flex items-center gap-3">
-              <i class="fas fa-cog text-orange-400"></i>
+              <div class="w-8 h-8 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center shadow-lg">
+                <i class="fas fa-cog text-white text-sm"></i>
+              </div>
               Settings
             </h2>
             <p class="text-gray-400 text-sm mt-1">Configure system parameters and monitoring options</p>
           </div>
           
           <!-- System Stats -->
-          <div class="flex flex-wrap gap-2 text-xs">
-            <div class="flex items-center gap-2 bg-slate-800 px-2 py-1.5 rounded-lg border border-slate-700">
-              <i class="fas fa-microchip text-blue-400"></i>
-              <span class="text-white font-semibold" id="header-cpu">--%</span>
+          <div class="flex flex-wrap gap-3 text-xs">
+            <div class="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-2 rounded-xl border border-slate-700/50 hover:border-blue-500/40 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 hover:scale-105 group">
+              <div class="w-6 h-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
+                <i class="fas fa-microchip text-white text-xs"></i>
+              </div>
+              <div>
+                <p class="text-gray-400 font-medium">CPU</p>
+                <p class="text-white font-semibold" id="header-cpu">--%</p>
+              </div>
             </div>
-            <div class="flex items-center gap-2 bg-slate-800 px-2 py-1.5 rounded-lg border border-slate-700">
-              <i class="fas fa-memory text-green-400"></i>
-              <span class="text-white font-semibold" id="header-memory">--</span>
+            <div class="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-2 rounded-xl border border-slate-700/50 hover:border-green-500/40 hover:shadow-lg hover:shadow-green-500/20 transition-all duration-300 hover:scale-105 group">
+              <div class="w-6 h-6 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
+                <i class="fas fa-memory text-white text-xs"></i>
+              </div>
+              <div>
+                <p class="text-gray-400 font-medium">Memory</p>
+                <p class="text-white font-semibold" id="header-memory">--</p>
+              </div>
             </div>
-            <div class="flex items-center gap-2 bg-slate-800 px-2 py-1.5 rounded-lg border border-slate-700">
-              <i class="fas fa-database text-purple-400"></i>
-              <span class="text-green-400 font-semibold text-xs" id="header-db"><i class="fas fa-circle"></i></span>
+            <div class="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-2 rounded-xl border border-slate-700/50 hover:border-purple-500/40 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300 hover:scale-105 group">
+              <div class="w-6 h-6 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
+                <i class="fas fa-database text-white text-xs"></i>
+              </div>
+              <div>
+                <p class="text-gray-400 font-medium">Database</p>
+                <p class="text-green-400 font-semibold" id="header-db"><i class="fas fa-circle text-xs"></i> Online</p>
+              </div>
             </div>
-            <div class="flex items-center gap-2 bg-slate-800 px-2 py-1.5 rounded-lg border border-slate-700">
-              <i class="fas fa-hdd text-orange-400"></i>
-              <span class="text-white font-semibold" id="header-storage">--</span>
+            <div class="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-2 rounded-xl border border-slate-700/50 hover:border-orange-500/40 hover:shadow-lg hover:shadow-orange-500/20 transition-all duration-300 hover:scale-105 group">
+              <div class="w-6 h-6 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
+                <i class="fas fa-hdd text-white text-xs"></i>
+              </div>
+              <div>
+                <p class="text-gray-400 font-medium">Storage</p>
+                <p class="text-white font-semibold" id="header-storage">--</p>
+              </div>
             </div>
           </div>
         </div>
@@ -115,11 +137,13 @@
         <!-- Settings Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <!-- InfluxDB Configuration -->
-          <div class="bg-slate-800 rounded-lg border border-slate-700 p-6 shadow-lg">
+          <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 p-6 shadow-xl hover:shadow-2xl transition-all duration-300">
             <div class="flex items-start justify-between mb-6">
               <div>
                 <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                  <i class="fas fa-database text-purple-500"></i>
+                  <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
+                    <i class="fas fa-database text-white text-sm"></i>
+                  </div>
                   InfluxDB Configuration
                 </h3>
                 <p class="text-sm text-gray-400 mt-1">Configure InfluxDB v2 connection settings</p>
@@ -130,54 +154,62 @@
               <!-- InfluxDB URL -->
               <div>
                 <label class="block text-sm font-medium text-gray-300 mb-2">
-                  <i class="fas fa-link text-blue-400 mr-1"></i>InfluxDB URL
+                  <div class="w-5 h-5 bg-gradient-to-br from-blue-500 to-blue-600 rounded inline-flex items-center justify-center mr-2">
+                    <i class="fas fa-link text-white text-xs"></i>
+                  </div>InfluxDB URL
                 </label>
                 <input type="text" 
                        id="influxdb-url"
                        value="<%= settings.influxdb?.url || 'http://localhost:8086' %>"
                        placeholder="http://localhost:8086"
-                       class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
+                       class="w-full bg-gradient-to-br from-slate-700 to-slate-800 border border-slate-600/50 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 hover:border-slate-500/70">
                 <p class="text-xs text-gray-500 mt-1">Full URL to your InfluxDB instance</p>
               </div>
 
               <!-- Organization -->
               <div>
                 <label class="block text-sm font-medium text-gray-300 mb-2">
-                  <i class="fas fa-building text-blue-400 mr-1"></i>Organization
+                  <div class="w-5 h-5 bg-gradient-to-br from-blue-500 to-blue-600 rounded inline-flex items-center justify-center mr-2">
+                    <i class="fas fa-building text-white text-xs"></i>
+                  </div>Organization
                 </label>
                 <input type="text" 
                        id="influxdb-org"
                        value="<%= settings.influxdb?.org || '' %>"
                        placeholder="my-org"
-                       class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
+                       class="w-full bg-gradient-to-br from-slate-700 to-slate-800 border border-slate-600/50 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 hover:border-slate-500/70">
                 <p class="text-xs text-gray-500 mt-1">InfluxDB organization name</p>
               </div>
 
               <!-- Bucket -->
               <div>
                 <label class="block text-sm font-medium text-gray-300 mb-2">
-                  <i class="fas fa-bucket text-blue-400 mr-1"></i>Bucket
+                  <div class="w-5 h-5 bg-gradient-to-br from-blue-500 to-blue-600 rounded inline-flex items-center justify-center mr-2">
+                    <i class="fas fa-bucket text-white text-xs"></i>
+                  </div>Bucket
                 </label>
                 <input type="text" 
                        id="influxdb-bucket"
                        value="<%= settings.influxdb?.bucket || '' %>"
                        placeholder="my-bucket"
-                       class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
+                       class="w-full bg-gradient-to-br from-slate-700 to-slate-800 border border-slate-600/50 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 hover:border-slate-500/70">
                 <p class="text-xs text-gray-500 mt-1">Bucket name for storing metrics</p>
               </div>
 
               <!-- Token -->
               <div>
                 <label class="block text-sm font-medium text-gray-300 mb-2">
-                  <i class="fas fa-key text-blue-400 mr-1"></i>API Token
+                  <div class="w-5 h-5 bg-gradient-to-br from-blue-500 to-blue-600 rounded inline-flex items-center justify-center mr-2">
+                    <i class="fas fa-key text-white text-xs"></i>
+                  </div>API Token
                 </label>
                 <div class="relative">
                   <input type="password" 
                          id="influxdb-token"
                          value="<%= settings.influxdb?.token || '' %>"
                          placeholder="Enter your InfluxDB API token"
-                         class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 pr-10 text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
-                  <button type="button" id="toggle-token-visibility" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors">
+                         class="w-full bg-gradient-to-br from-slate-700 to-slate-800 border border-slate-600/50 rounded-xl px-4 py-3 pr-10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 hover:border-slate-500/70">
+                  <button type="button" id="toggle-token-visibility" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white p-2 rounded-lg hover:bg-slate-700/50 transition-all duration-200 hover:scale-110">
                     <i class="fas fa-eye" id="token-eye-icon"></i>
                   </button>
                 </div>
@@ -186,10 +218,10 @@
 
               <!-- Test Connection Button -->
               <div class="flex gap-2">
-                <button id="test-influxdb-btn" class="flex-1 px-4 py-2 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-lg hover:from-purple-500 hover:to-purple-600 transition-all font-medium text-sm">
+                <button id="test-influxdb-btn" class="flex-1 px-4 py-3 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded-xl transition-all duration-300 font-medium text-sm hover:shadow-lg hover:shadow-purple-500/25 hover:scale-105">
                   <i class="fas fa-plug mr-2"></i>Test Connection
                 </button>
-                <button id="save-influxdb-btn" class="flex-1 px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-500 hover:to-green-600 transition-all font-medium text-sm">
+                <button id="save-influxdb-btn" class="flex-1 px-4 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded-xl transition-all duration-300 font-medium text-sm hover:shadow-lg hover:shadow-green-500/25 hover:scale-105">
                   <i class="fas fa-save mr-2"></i>Save
                 </button>
               </div>
@@ -202,11 +234,13 @@
           </div>
 
           <!-- Polling Interval Setting -->
-          <div class="bg-slate-800 rounded-lg border border-slate-700 p-6 shadow-lg">
+          <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 p-6 shadow-xl hover:shadow-2xl transition-all duration-300">
             <div class="flex items-start justify-between mb-6">
               <div>
                 <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                  <i class="fas fa-sync-alt text-blue-500"></i>
+                  <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
+                    <i class="fas fa-sync-alt text-white text-sm"></i>
+                  </div>
                   Polling Interval
                 </h3>
                 <p class="text-gray-400 text-sm mt-2">Set how often SNMP data is collected from devices</p>
@@ -264,9 +298,11 @@
           </div>
 
           <!-- System Information -->
-          <div class="bg-slate-800 rounded-lg border border-slate-700 p-6 shadow-lg">
+          <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 p-6 shadow-xl hover:shadow-2xl transition-all duration-300">
             <h3 class="text-lg font-bold text-white flex items-center gap-2 mb-6">
-              <i class="fas fa-info-circle text-purple-500"></i>
+              <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
+                <i class="fas fa-info-circle text-white text-sm"></i>
+              </div>
               System Information
             </h3>
 
@@ -304,9 +340,11 @@
         </div>
 
         <!-- Additional Settings Section -->
-        <div class="mt-6 bg-slate-800 rounded-lg border border-slate-700 p-6 shadow-lg">
+        <div class="mt-6 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 p-6 shadow-xl hover:shadow-2xl transition-all duration-300">
           <h3 class="text-lg font-bold text-white flex items-center gap-2 mb-6">
-            <i class="fas fa-sliders-h text-yellow-500"></i>
+            <div class="w-8 h-8 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg flex items-center justify-center shadow-lg">
+              <i class="fas fa-sliders-h text-white text-sm"></i>
+            </div>
             Advanced Settings
           </h3>
 
@@ -1016,6 +1054,32 @@
         statusMessage.classList.add('hidden');
       }, 5000);
     }
+
+    // Update header system stats
+    function updateHeaderStats() {
+      fetch('/api/system-info')
+        .then(response => response.json())
+        .then(data => {
+          if (document.getElementById('header-cpu')) {
+            document.getElementById('header-cpu').textContent = data.cpuUsage + '%';
+          }
+          if (document.getElementById('header-memory')) {
+            const memUsedGB = (data.memory.used / 1024 / 1024 / 1024).toFixed(1);
+            const memTotalGB = (data.memory.total / 1024 / 1024 / 1024).toFixed(1);
+            document.getElementById('header-memory').textContent = `${memUsedGB}/${memTotalGB}GB`;
+          }
+          if (document.getElementById('header-storage') && data.storage) {
+            const storageUsedGB = (data.storage.used / 1024 / 1024 / 1024).toFixed(1);
+            const storageTotalGB = (data.storage.total / 1024 / 1024 / 1024).toFixed(1);
+            document.getElementById('header-storage').textContent = `${storageUsedGB}/${storageTotalGB}GB`;
+          }
+        })
+        .catch(err => console.error('Error fetching system info:', err));
+    }
+
+    // Initial update and periodic refresh
+    updateHeaderStats();
+    setInterval(updateHeaderStats, 10000); // Update every 10 seconds
   </script>
 </body>
 </html>

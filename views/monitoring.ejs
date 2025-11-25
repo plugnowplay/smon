@@ -14,20 +14,20 @@
 <body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-gray-100 min-h-screen">
   <div class="flex h-screen">
     <!-- Mobile Menu Button -->
-    <button id="mobile-menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-slate-800 p-2 rounded-lg border border-slate-700 shadow-lg">
-      <i class="fas fa-bars text-white"></i>
+    <button id="mobile-menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-gradient-to-br from-slate-800 to-slate-900 p-3 rounded-xl border border-slate-700/50 shadow-xl hover:shadow-2xl hover:border-slate-600/70 transition-all duration-300 group">
+      <i class="fas fa-bars text-white group-hover:scale-110 transition-transform duration-200"></i>
     </button>
 
     <!-- Mobile Overlay -->
-    <div id="mobile-overlay" class="md:hidden fixed inset-0 bg-black bg-opacity-50 z-30 hidden"></div>
+    <div id="mobile-overlay" class="md:hidden fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm z-30 hidden"></div>
 
     <!-- Sidebar -->
-    <div id="sidebar" class="w-64 bg-slate-950 border-r border-slate-700 shadow-xl flex flex-col fixed md:relative inset-y-0 left-0 z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
+    <div id="sidebar" class="w-64 bg-gradient-to-b from-slate-950 to-slate-900 border-r border-slate-700/50 shadow-2xl flex flex-col fixed md:relative inset-y-0 left-0 z-40 transform -translate-x-full md:translate-x-0 transition-all duration-300 ease-in-out">
       <!-- Header -->
-      <div class="p-6 border-b border-slate-700">
+      <div class="p-6 border-b border-slate-700/50 bg-gradient-to-r from-slate-900/50 to-slate-800/50">
         <div class="flex items-center gap-3 mb-1">
-          <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
-            <i class="fas fa-chart-line text-white font-bold text-lg"></i>
+          <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 group">
+            <i class="fas fa-chart-line text-white font-bold text-lg group-hover:scale-110 transition-transform duration-200"></i>
           </div>
           <div>
             <h1 class="text-lg font-bold text-white">SMon</h1>
@@ -39,42 +39,42 @@
       <!-- Navigation -->
       <nav class="flex-1 px-4 py-6 overflow-y-auto">
         <div class="space-y-2">
-          <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-slate-700 transition-all duration-200">
-            <i class="fas fa-chart-area w-5"></i>
+          <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-chart-area w-5 group-hover:scale-110 transition-transform duration-200"></i>
             <span>Dashboard</span>
           </a>
-          <a href="/monitoring" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium transition-all hover:shadow-lg">
-            <i class="fas fa-gauge-high w-5"></i>
+          <a href="/monitoring" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium transition-all hover:shadow-lg hover:shadow-blue-500/25 hover:scale-[1.02] group">
+            <i class="fas fa-gauge-high w-5 group-hover:scale-110 transition-transform duration-200"></i>
             <span>Bandwidth Monitor</span>
           </a>
-          <a href="/ping" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-slate-700 transition-all duration-200">
-            <i class="fas fa-network-wired w-5"></i>
+          <a href="/ping" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-network-wired w-5 group-hover:scale-110 transition-transform duration-200"></i>
             <span>Ping Monitor</span>
           </a>
-          <a href="/devices" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-slate-700 transition-all duration-200">
-            <i class="fas fa-server w-5"></i>
+          <a href="/devices" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-server w-5 group-hover:scale-110 transition-transform duration-200"></i>
             <span>Devices</span>
           </a>
-          <a href="/settings" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-slate-700 transition-all duration-200">
-            <i class="fas fa-cog w-5"></i>
+          <a href="/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-cog w-5 group-hover:scale-110 transition-transform duration-200"></i>
             <span>Settings</span>
           </a>
-          <a href="/about" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-slate-700 transition-all duration-200">
-            <i class="fas fa-info-circle w-5"></i>
+          <a href="/about" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+            <i class="fas fa-info-circle w-5 group-hover:scale-110 transition-transform duration-200"></i>
             <span>About</span>
           </a>
-          <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-lg text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all duration-200 mt-4">
-            <i class="fas fa-sign-out-alt w-5"></i>
+          <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-gradient-to-r hover:from-red-500/20 hover:to-red-600/20 hover:text-red-300 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] mt-4 group">
+            <i class="fas fa-sign-out-alt w-5 group-hover:scale-110 transition-transform duration-200"></i>
             <span>Logout</span>
           </a>
         </div>
       </nav>
 
       <!-- Footer -->
-      <div class="px-4 py-4 border-t border-slate-700">
+      <div class="px-4 py-4 border-t border-slate-700/50 bg-gradient-to-r from-slate-900/30 to-slate-800/30">
         <div class="text-xs text-gray-500 text-center">
-          <p>SNMP Monitor v2.0</p>
-          <p>Network Intelligence</p>
+          <p class="font-medium">SNMP Monitor v2.0</p>
+          <p class="text-gray-600">Network Intelligence</p>
         </div>
       </div>
     </div>
@@ -82,11 +82,13 @@
     <!-- Main Content -->
     <div class="flex-1 overflow-auto md:ml-0">
       <!-- Top Header -->
-      <div class="bg-slate-950 border-b border-slate-700 px-4 md:px-8 py-4 sticky top-0 z-20">
+      <div class="bg-gradient-to-r from-slate-950 to-slate-900 border-b border-slate-700/50 px-4 md:px-8 py-4 sticky top-0 z-20 shadow-xl">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <h2 class="text-2xl font-bold text-white flex items-center gap-3">
-              <i class="fas fa-chart-line text-blue-400"></i>
+              <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
+                <i class="fas fa-chart-line text-white text-sm"></i>
+              </div>
               Bandwidth Monitoring
             </h2>
             <p class="text-gray-400 text-sm mt-1">Real-time Interface Performance & Analysis</p>
@@ -94,8 +96,8 @@
           
           <!-- System Stats -->
           <div class="flex flex-wrap gap-3 text-xs">
-            <div class="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-2 rounded-lg border border-slate-700/50 hover:border-blue-500/30 transition-all duration-200">
-              <div class="w-6 h-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+            <div class="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-2 rounded-xl border border-slate-700/50 hover:border-blue-500/40 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 hover:scale-105 group">
+              <div class="w-6 h-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
                 <i class="fas fa-microchip text-white text-xs"></i>
               </div>
               <div>
@@ -103,8 +105,8 @@
                 <p class="text-white font-semibold" id="header-cpu">--%</p>
               </div>
             </div>
-            <div class="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-2 rounded-lg border border-slate-700/50 hover:border-green-500/30 transition-all duration-200">
-              <div class="w-6 h-6 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+            <div class="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-2 rounded-xl border border-slate-700/50 hover:border-green-500/40 hover:shadow-lg hover:shadow-green-500/20 transition-all duration-300 hover:scale-105 group">
+              <div class="w-6 h-6 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
                 <i class="fas fa-memory text-white text-xs"></i>
               </div>
               <div>
@@ -112,8 +114,8 @@
                 <p class="text-white font-semibold" id="header-memory">--</p>
               </div>
             </div>
-            <div class="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-2 rounded-lg border border-slate-700/50 hover:border-purple-500/30 transition-all duration-200">
-              <div class="w-6 h-6 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
+            <div class="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-2 rounded-xl border border-slate-700/50 hover:border-purple-500/40 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300 hover:scale-105 group">
+              <div class="w-6 h-6 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
                 <i class="fas fa-database text-white text-xs"></i>
               </div>
               <div>
@@ -121,8 +123,8 @@
                 <p class="text-green-400 font-semibold" id="header-db"><i class="fas fa-circle text-xs"></i> Online</p>
               </div>
             </div>
-            <div class="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-2 rounded-lg border border-slate-700/50 hover:border-orange-500/30 transition-all duration-200">
-              <div class="w-6 h-6 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
+            <div class="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-2 rounded-xl border border-slate-700/50 hover:border-orange-500/40 hover:shadow-lg hover:shadow-orange-500/20 transition-all duration-300 hover:scale-105 group">
+              <div class="w-6 h-6 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
                 <i class="fas fa-hdd text-white text-xs"></i>
               </div>
               <div>
@@ -393,14 +395,20 @@
 
     function createInterfaceChart(interfaceName, rxData, txData) {
       const container = document.getElementById('charts-container');
+      if (!container) {
+        console.error('Charts container not found!');
+        return;
+      }
       
       // Clear placeholder if first chart
       if (container.children.length === 1 && container.children[0].classList.contains('col-span-full')) {
         container.innerHTML = '';
       }
       
-      const chartIdRx = `chart-${interfaceName.replace(/\s+/g, '-')}-rx`;
-      const chartIdTx = `chart-${interfaceName.replace(/\s+/g, '-')}-tx`;
+      const chartIdRx = `chart-${interfaceName.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-_]/g, '_')}-rx`;
+      const chartIdTx = `chart-${interfaceName.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-_]/g, '_')}-tx`;
+      
+      console.log(`Generated IDs: RX=${chartIdRx}, TX=${chartIdTx}`);
       
       // Create RX card
       const cardRx = document.createElement('div');
@@ -421,8 +429,8 @@
             <span class="text-green-400 font-semibold">(Mbps)</span>
           </div>
         </div>
-        <div class="relative" style="height: 280px;">
-          <canvas id="${chartIdRx}"></canvas>
+        <div class="relative w-full" style="height: 280px;">
+          <canvas id="${chartIdRx}" class="w-full h-full"></canvas>
         </div>
       `;
       container.appendChild(cardRx);
@@ -446,12 +454,17 @@
             <span class="text-amber-400 font-semibold">(Mbps)</span>
           </div>
         </div>
-        <div class="relative" style="height: 280px;">
-          <canvas id="${chartIdTx}"></canvas>
+        <div class="relative w-full" style="height: 280px;">
+          <canvas id="${chartIdTx}" class="w-full h-full"></canvas>
         </div>
       `;
       container.appendChild(cardTx);
       
+      // Create charts immediately after DOM elements are appended
+      createChartsForInterface(interfaceName, rxData, txData, chartIdRx, chartIdTx);
+    }
+
+    function createChartsForInterface(interfaceName, rxData, txData, chartIdRx, chartIdTx) {
       // Destroy old charts if exist
       if (chartInstances[chartIdRx]) {
         chartInstances[chartIdRx].destroy();
@@ -460,8 +473,21 @@
         chartInstances[chartIdTx].destroy();
       }
       
+      // Check if canvas elements exist
+      const canvasRx = document.getElementById(chartIdRx);
+      const canvasTx = document.getElementById(chartIdTx);
+      
+      if (!canvasRx) {
+        console.error(`Canvas element with ID '${chartIdRx}' not found for interface '${interfaceName}'`);
+        return;
+      }
+      if (!canvasTx) {
+        console.error(`Canvas element with ID '${chartIdTx}' not found for interface '${interfaceName}'`);
+        return;
+      }
+      
       // Create RX chart (green line)
-      const ctxRx = document.getElementById(chartIdRx).getContext('2d');
+      const ctxRx = canvasRx.getContext('2d');
       chartInstances[chartIdRx] = new Chart(ctxRx, {
         type: 'line',
         data: {
@@ -575,7 +601,7 @@
       });
       
       // Create TX chart (orange line)
-      const ctxTx = document.getElementById(chartIdTx).getContext('2d');
+      const ctxTx = canvasTx.getContext('2d');
       chartInstances[chartIdTx] = new Chart(ctxTx, {
         type: 'line',
         data: {
@@ -651,7 +677,7 @@
                 tooltipFormat: 'MMM dd, yyyy HH:mm:ss'
               },
               grid: {
-                color: 'rgba(100, 116, 139, 0.2)',
+                color: 'rgba(100, 116, 139, 0.3)',
                 drawBorder: false
               },
               ticks: {
@@ -744,6 +770,10 @@
         // Load all selected interfaces
         container.innerHTML = '';
         let completed = 0;
+        let chartsCreated = 0;
+        let noDataMessageShown = false;
+        let chartCreationAttempts = 0;
+        let allDataLoaded = false;
 
         selectedInterfaces.forEach(iface => {
           // Support both old format (string) and new format ({index, name})
@@ -772,18 +802,29 @@
             const hasTxData = txData.length > 0 && txData.some(d => d.value > 0.0001);
             
             if (hasRxData || hasTxData) {
+              chartCreationAttempts++;
               createInterfaceChart(ifaceName, rxData, txData);
+              chartsCreated++;
             } else {
+              chartCreationAttempts++;
               // Skipping chart - no traffic data for this interface
             }
             completed++;
             
-            // Show message if no interfaces have data
-            if (completed === selectedInterfaces.length) {
-              const charts = container.querySelectorAll('.bg-slate-800');
-              if (charts.length === 0) {
-                container.innerHTML = '<div class="col-span-full text-center py-12 text-gray-400"><i class="fas fa-chart-line text-4xl mb-4 opacity-50"></i><p>No interfaces with traffic data found for the selected time range</p></div>';
-              }
+            // Check if all interfaces have completed loading
+            if (completed === selectedInterfaces.length && !allDataLoaded) {
+              allDataLoaded = true;
+              
+              // Use requestAnimationFrame to ensure DOM is updated
+              requestAnimationFrame(() => {
+                setTimeout(() => {
+                  const charts = container.querySelectorAll('.bg-gradient-to-br');
+                  if (charts.length === 0 && !noDataMessageShown) {
+                    container.innerHTML = '<div class="col-span-full text-center py-12 text-gray-400"><i class="fas fa-chart-line text-4xl mb-4 opacity-50"></i><p>No interfaces with traffic data found for the selected time range</p></div>';
+                    noDataMessageShown = true;
+                  }
+                }, 100);
+              });
             }
           });
         });
@@ -1125,8 +1166,14 @@
       return stats;
     }
 
-    // Auto-refresh every 1 minute
-    setInterval(loadChartData, 60000);
+    // Auto-refresh every 1 minute (only if charts are currently displayed)
+    setInterval(() => {
+      const container = document.getElementById('charts-container');
+      const charts = container.querySelectorAll('.bg-gradient-to-br');
+      if (charts.length > 0) {
+        loadChartData();
+      }
+    }, 60000);
   </script>
 </body>
 </html>

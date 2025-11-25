@@ -13,20 +13,20 @@
 <body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-gray-100 min-h-screen">
     <div class="flex h-screen">
         <!-- Mobile Menu Button -->
-        <button id="mobile-menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-slate-800 p-2 rounded-lg border border-slate-700 shadow-lg">
-            <i class="fas fa-bars text-white"></i>
+        <button id="mobile-menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-gradient-to-br from-slate-800 to-slate-900 p-3 rounded-xl border border-slate-700/50 shadow-xl hover:shadow-2xl hover:border-slate-600/70 transition-all duration-300 group">
+            <i class="fas fa-bars text-white group-hover:scale-110 transition-transform duration-200"></i>
         </button>
 
         <!-- Mobile Overlay -->
-        <div id="mobile-overlay" class="md:hidden fixed inset-0 bg-black bg-opacity-50 z-30 hidden"></div>
+        <div id="mobile-overlay" class="md:hidden fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm z-30 hidden"></div>
 
         <!-- Sidebar -->
-        <div id="sidebar" class="w-64 bg-slate-950 border-r border-slate-700 shadow-xl flex flex-col fixed md:relative inset-y-0 left-0 z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
+        <div id="sidebar" class="w-64 bg-gradient-to-b from-slate-950 to-slate-900 border-r border-slate-700/50 shadow-2xl flex flex-col fixed md:relative inset-y-0 left-0 z-40 transform -translate-x-full md:translate-x-0 transition-all duration-300 ease-in-out">
             <!-- Header -->
-            <div class="p-6 border-b border-slate-700">
+            <div class="p-6 border-b border-slate-700/50 bg-gradient-to-r from-slate-900/50 to-slate-800/50">
                 <div class="flex items-center gap-3 mb-1">
-                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-chart-line text-white font-bold text-lg"></i>
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 group">
+                        <i class="fas fa-chart-line text-white font-bold text-lg group-hover:scale-110 transition-transform duration-200"></i>
                     </div>
                     <div>
                         <h1 class="text-lg font-bold text-white">SMon</h1>
@@ -38,42 +38,42 @@
             <!-- Navigation -->
             <nav class="flex-1 px-4 py-6 overflow-y-auto">
                 <div class="space-y-2">
-                    <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-slate-700 transition-all duration-200">
-                        <i class="fas fa-chart-area w-5"></i>
+                    <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+                        <i class="fas fa-chart-area w-5 group-hover:scale-110 transition-transform duration-200"></i>
                         <span>Dashboard</span>
                     </a>
-                    <a href="/monitoring" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-slate-700 transition-all duration-200">
-                        <i class="fas fa-gauge-high w-5"></i>
+                    <a href="/monitoring" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+                        <i class="fas fa-gauge-high w-5 group-hover:scale-110 transition-transform duration-200"></i>
                         <span>Bandwidth Monitor</span>
                     </a>
-                    <a href="/ping" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium transition-all hover:shadow-lg">
-                        <i class="fas fa-network-wired w-5"></i>
+                    <a href="/ping" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium transition-all hover:shadow-lg hover:shadow-blue-500/25 hover:scale-[1.02] group">
+                        <i class="fas fa-network-wired w-5 group-hover:scale-110 transition-transform duration-200"></i>
                         <span>Ping Monitor</span>
                     </a>
-                    <a href="/devices" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-slate-700 transition-all duration-200">
-                        <i class="fas fa-server w-5"></i>
+                    <a href="/devices" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+                        <i class="fas fa-server w-5 group-hover:scale-110 transition-transform duration-200"></i>
                         <span>Devices</span>
                     </a>
-                    <a href="/settings" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-slate-700 transition-all duration-200">
-                        <i class="fas fa-cog w-5"></i>
+                    <a href="/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+                        <i class="fas fa-cog w-5 group-hover:scale-110 transition-transform duration-200"></i>
                         <span>Settings</span>
                     </a>
-                    <a href="/about" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-slate-700 transition-all duration-200">
-                        <i class="fas fa-info-circle w-5"></i>
+                    <a href="/about" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+                        <i class="fas fa-info-circle w-5 group-hover:scale-110 transition-transform duration-200"></i>
                         <span>About</span>
                     </a>
-                    <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-lg text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all duration-200 mt-4">
-                        <i class="fas fa-sign-out-alt w-5"></i>
+                    <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-gradient-to-r hover:from-red-500/20 hover:to-red-600/20 hover:text-red-300 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] mt-4 group">
+                        <i class="fas fa-sign-out-alt w-5 group-hover:scale-110 transition-transform duration-200"></i>
                         <span>Logout</span>
                     </a>
                 </div>
             </nav>
 
             <!-- Footer -->
-            <div class="px-4 py-4 border-t border-slate-700">
+            <div class="px-4 py-4 border-t border-slate-700/50 bg-gradient-to-r from-slate-900/30 to-slate-800/30">
                 <div class="text-xs text-gray-500 text-center">
-                    <p>SNMP Monitor v2.0</p>
-                    <p>Network Intelligence</p>
+                    <p class="font-medium">SNMP Monitor v2.0</p>
+                    <p class="text-gray-600">Network Intelligence</p>
                 </div>
             </div>
         </div>
@@ -81,11 +81,13 @@
         <!-- Main Content -->
         <div class="flex-1 overflow-auto md:ml-0">
             <!-- Top Header -->
-            <div class="bg-slate-950 border-b border-slate-700 px-4 md:px-8 py-4 sticky top-0 z-20">
+            <div class="bg-gradient-to-r from-slate-950 to-slate-900 border-b border-slate-700/50 px-4 md:px-8 py-4 sticky top-0 z-20 shadow-xl">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div>
                         <h2 class="text-2xl font-bold text-white flex items-center gap-3">
-                            <i class="fas fa-network-wired text-purple-400"></i>
+                            <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
+                                <i class="fas fa-network-wired text-white text-sm"></i>
+                            </div>
                             Ping Monitoring
                         </h2>
                         <p class="text-gray-400 text-sm mt-1">Monitor Network Connectivity & Latency</p>
@@ -93,26 +95,46 @@
                     
                     <div class="flex flex-wrap items-center gap-3">
                         <!-- System Stats -->
-                        <div class="flex flex-wrap gap-2 text-xs">
-                            <div class="flex items-center gap-2 bg-slate-800 px-2 py-1.5 rounded-lg border border-slate-700">
-                                <i class="fas fa-microchip text-blue-400"></i>
-                                <span class="text-white font-semibold" id="header-cpu">--%</span>
+                        <div class="flex flex-wrap gap-3 text-xs">
+                            <div class="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-2 rounded-xl border border-slate-700/50 hover:border-blue-500/40 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 hover:scale-105 group">
+                                <div class="w-6 h-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
+                                    <i class="fas fa-microchip text-white text-xs"></i>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400 font-medium">CPU</p>
+                                    <p class="text-white font-semibold" id="header-cpu">--%</p>
+                                </div>
                             </div>
-                            <div class="flex items-center gap-2 bg-slate-800 px-2 py-1.5 rounded-lg border border-slate-700">
-                                <i class="fas fa-memory text-green-400"></i>
-                                <span class="text-white font-semibold" id="header-memory">--</span>
+                            <div class="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-2 rounded-xl border border-slate-700/50 hover:border-green-500/40 hover:shadow-lg hover:shadow-green-500/20 transition-all duration-300 hover:scale-105 group">
+                                <div class="w-6 h-6 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
+                                    <i class="fas fa-memory text-white text-xs"></i>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400 font-medium">Memory</p>
+                                    <p class="text-white font-semibold" id="header-memory">--</p>
+                                </div>
                             </div>
-                            <div class="flex items-center gap-2 bg-slate-800 px-2 py-1.5 rounded-lg border border-slate-700">
-                                <i class="fas fa-database text-purple-400"></i>
-                                <span class="text-green-400 font-semibold text-xs" id="header-db"><i class="fas fa-circle"></i></span>
+                            <div class="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-2 rounded-xl border border-slate-700/50 hover:border-purple-500/40 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300 hover:scale-105 group">
+                                <div class="w-6 h-6 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
+                                    <i class="fas fa-database text-white text-xs"></i>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400 font-medium">Database</p>
+                                    <p class="text-green-400 font-semibold" id="header-db"><i class="fas fa-circle text-xs"></i> Online</p>
+                                </div>
                             </div>
-                            <div class="flex items-center gap-2 bg-slate-800 px-2 py-1.5 rounded-lg border border-slate-700">
-                                <i class="fas fa-hdd text-orange-400"></i>
-                                <span class="text-white font-semibold" id="header-storage">--</span>
+                            <div class="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 px-3 py-2 rounded-xl border border-slate-700/50 hover:border-orange-500/40 hover:shadow-lg hover:shadow-orange-500/20 transition-all duration-300 hover:scale-105 group">
+                                <div class="w-6 h-6 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200">
+                                    <i class="fas fa-hdd text-white text-xs"></i>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400 font-medium">Storage</p>
+                                    <p class="text-white font-semibold" id="header-storage">--</p>
+                                </div>
                             </div>
                         </div>
                         
-                        <button onclick="showAddTargetModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-all shadow-lg hover:shadow-xl">
+                        <button onclick="showAddTargetModal()" class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-2 rounded-xl font-medium transition-all shadow-lg hover:shadow-xl hover:shadow-blue-500/25 hover:scale-105">
                             <i class="fas fa-plus mr-2"></i>Add Target
                         </button>
                     </div>
@@ -130,21 +152,21 @@
                     </h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                         <% groupedTargets[group].forEach(target => { %>
-                        <div class="bg-slate-800 rounded-lg p-4 md:p-6 border border-slate-700 hover:border-slate-600 transition-all shadow-lg">
+                        <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 p-4 md:p-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:border-slate-600/70">
                             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 gap-3">
                                 <div class="flex-1 min-w-0">
                                     <h4 class="text-base md:text-lg font-semibold text-white mb-1 truncate"><%= target.name %></h4>
                                     <p class="text-gray-400 text-sm truncate"><%= target.host %></p>
                                 </div>
                                 <div class="flex items-center space-x-2 flex-shrink-0">
-                                    <span id="status-<%= target.id %>" class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium">
+                                    <span id="status-<%= target.id %>" class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium shadow-md">
                                         <i class="fas fa-spinner fa-spin mr-1"></i>Checking...
                                     </span>
                                     <div class="flex space-x-1">
-                                        <button onclick="toggleTarget(<%= target.id %>)" class="text-gray-400 hover:text-gray-300 transition-colors p-1" title="<%= target.enabled ? 'Disable' : 'Enable' %>">
+                                        <button onclick="toggleTarget(<%= target.id %>)" class="text-gray-400 hover:text-gray-300 transition-all duration-200 p-2 rounded-lg hover:bg-slate-700/50 hover:scale-110" title="<%= target.enabled ? 'Disable' : 'Enable' %>">
                                             <i class="fas fa-<%= target.enabled ? 'toggle-on' : 'toggle-off' %> text-sm"></i>
                                         </button>
-                                        <button onclick="deleteTarget(<%= target.id %>)" class="text-red-400 hover:text-red-300 transition-colors p-1" title="Delete">
+                                        <button onclick="deleteTarget(<%= target.id %>)" class="text-red-400 hover:text-red-300 transition-all duration-200 p-2 rounded-lg hover:bg-red-500/20 hover:scale-110" title="Delete">
                                             <i class="fas fa-trash text-xs"></i>
                                         </button>
                                     </div>
@@ -153,27 +175,33 @@
 
                             <div class="space-y-3 md:space-y-4">
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
-                                    <div class="bg-slate-700 rounded-lg p-3">
+                                    <div class="bg-gradient-to-br from-slate-700 to-slate-800 rounded-xl p-4 border border-slate-600/30 hover:border-blue-500/30 transition-all duration-300 hover:shadow-lg hover:scale-[1.02]">
                                         <div class="flex items-center justify-between">
-                                            <span class="text-xs text-gray-400">Latency</span>
-                                            <i class="fas fa-clock text-blue-400"></i>
+                                            <span class="text-xs text-gray-400 font-medium">Latency</span>
+                                            <div class="w-6 h-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-md">
+                                                <i class="fas fa-clock text-white text-xs"></i>
+                                            </div>
                                         </div>
-                                        <p id="latency-<%= target.id %>" class="text-lg font-semibold text-white mt-1">-- ms</p>
+                                        <p id="latency-<%= target.id %>" class="text-lg font-bold text-white mt-2">-- ms</p>
                                     </div>
-                                    <div class="bg-slate-700 rounded-lg p-3">
+                                    <div class="bg-gradient-to-br from-slate-700 to-slate-800 rounded-xl p-4 border border-slate-600/30 hover:border-yellow-500/30 transition-all duration-300 hover:shadow-lg hover:scale-[1.02]">
                                         <div class="flex items-center justify-between">
-                                            <span class="text-xs text-gray-400">Packet Loss</span>
-                                            <i class="fas fa-exclamation-triangle text-yellow-400"></i>
+                                            <span class="text-xs text-gray-400 font-medium">Packet Loss</span>
+                                            <div class="w-6 h-6 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg flex items-center justify-center shadow-md">
+                                                <i class="fas fa-exclamation-triangle text-white text-xs"></i>
+                                            </div>
                                         </div>
-                                        <p id="packetloss-<%= target.id %>" class="text-lg font-semibold text-white mt-1">-- %</p>
+                                        <p id="packetloss-<%= target.id %>" class="text-lg font-bold text-white mt-2">-- %</p>
                                     </div>
                                 </div>
-                                <div class="bg-slate-700 rounded-lg p-3">
+                                <div class="bg-gradient-to-br from-slate-700 to-slate-800 rounded-xl p-4 border border-slate-600/30 hover:border-purple-500/30 transition-all duration-300 hover:shadow-lg hover:scale-[1.02]">
                                     <div class="flex items-center justify-between">
-                                        <span class="text-xs text-gray-400">Jitter</span>
-                                        <i class="fas fa-wave-square text-purple-400"></i>
+                                        <span class="text-xs text-gray-400 font-medium">Jitter</span>
+                                        <div class="w-6 h-6 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center shadow-md">
+                                            <i class="fas fa-wave-square text-white text-xs"></i>
+                                        </div>
                                     </div>
-                                    <p id="jitter-<%= target.id %>" class="text-lg font-semibold text-white mt-1">-- ms</p>
+                                    <p id="jitter-<%= target.id %>" class="text-lg font-bold text-white mt-2">-- ms</p>
                                 </div>
                             </div>
 
@@ -191,12 +219,12 @@
                 <!-- Empty State -->
                 <% if (Object.keys(groupedTargets).length === 0) { %>
                 <div class="text-center py-8 md:py-12">
-                    <div class="w-20 h-20 md:w-24 md:h-24 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div class="w-20 h-20 md:w-24 md:h-24 bg-gradient-to-br from-slate-800 to-slate-900 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-700/50 shadow-xl">
                         <i class="fas fa-network-wired text-3xl md:text-4xl text-gray-400"></i>
                     </div>
                     <h3 class="text-lg md:text-xl font-semibold text-white mb-2">No Ping Targets</h3>
                     <p class="text-gray-400 mb-4 md:mb-6 text-sm md:text-base px-4">Add your first ping target to start monitoring network connectivity.</p>
-                    <button onclick="showAddTargetModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg font-medium transition-all">
+                    <button onclick="showAddTargetModal()" class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 md:px-6 py-2 md:py-3 rounded-xl font-medium transition-all shadow-lg hover:shadow-xl hover:shadow-blue-500/25 hover:scale-105">
                         <i class="fas fa-plus mr-2"></i>Add First Target
                     </button>
                 </div>
@@ -204,10 +232,12 @@
 
                 <!-- Ping Charts Section -->
                 <div class="mt-8">
-                    <div class="bg-slate-800 rounded-lg border border-slate-700 shadow-lg p-6">
+                    <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 shadow-xl p-6 hover:shadow-2xl transition-all duration-300">
                         <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-4">
                             <h2 class="text-xl font-semibold text-white flex items-center">
-                                <i class="fas fa-chart-line mr-3 text-blue-400"></i>
+                                <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mr-3 shadow-lg">
+                                    <i class="fas fa-chart-line text-white text-sm"></i>
+                                </div>
                                 Ping Latency Charts
                             </h2>
                             <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
@@ -237,12 +267,12 @@
     </div>
 
     <!-- Add Target Modal -->
-    <div id="addTargetModal" class="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full z-50 hidden">
-        <div class="relative top-4 md:top-20 mx-auto p-4 md:p-5 border border-slate-700 w-full max-w-sm md:max-w-md shadow-2xl rounded-lg bg-slate-800">
+    <div id="addTargetModal" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm overflow-y-auto h-full w-full z-50 hidden">
+        <div class="relative top-4 md:top-20 mx-auto p-4 md:p-5 border border-slate-700/50 w-full max-w-sm md:max-w-md shadow-2xl rounded-xl bg-gradient-to-br from-slate-800 to-slate-900">
             <div class="mt-3">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-lg font-medium text-white">Add Ping Target</h3>
-                    <button onclick="hideAddTargetModal()" class="text-gray-400 hover:text-white p-1">
+                    <button onclick="hideAddTargetModal()" class="text-gray-400 hover:text-white p-2 rounded-lg hover:bg-slate-700/50 transition-all duration-200 hover:scale-110">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
