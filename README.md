@@ -34,10 +34,10 @@
   - Test connection sebelum save
   - Polling interval management
   - Ping notification settings dengan threshold konfigurasi
-  - Data retention policy (1-365 hari)
+  - Data retention policy (1-730 hari)
 - 🔐 **Authentication System** - Sistem login dengan session management
 - 📈 **InfluxDB v2 Integration** - Time-series database untuk penyimpanan data historis
-- 💾 **Data Persistence** - Ping history storage dengan 1-month retention dan automatic cleanup
+- 💾 **Data Persistence** - Ping history storage dengan 12-month retention dan automatic cleanup
 
 ### Notifications & Alerts
 - 🔔 **Smart Notifications** - Notifikasi otomatis untuk:
@@ -211,14 +211,14 @@ graphts/
 {
   "pollingInterval": 60000,
   "pingInterval": 30000,
-  "dataRetention": 30
+  "dataRetention": 365
 }
 ```
 
 **Settings Configuration:**
 - `pollingInterval`: SNMP polling interval in milliseconds (default: 60000 = 1 minute)
 - `pingInterval`: Ping monitoring interval in milliseconds (default: 30000 = 30 seconds)
-- `dataRetention`: Data retention period in days (default: 30)
+- `dataRetention`: Data retention period in days (default: 365, max: 730)
 
 ### Ping Targets Configuration (`ping-targets.json`)
 

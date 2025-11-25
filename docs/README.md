@@ -175,14 +175,14 @@ graphts/
 {
   "pollingInterval": 60000,
   "pingInterval": 30000,
-  "dataRetention": 30
+  "dataRetention": 365
 }
 ```
 
 **Settings Configuration:**
 - `pollingInterval`: SNMP polling interval in milliseconds (default: 60000 = 1 minute)
 - `pingInterval`: Ping monitoring interval in milliseconds (default: 30000 = 30 seconds)
-- `dataRetention`: Data retention period in days (default: 30)
+- `dataRetention`: Data retention period in days (default: 365, max: 730)
 
 ### Ping Targets Configuration (`ping-targets.json`)
 

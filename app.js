@@ -54,7 +54,7 @@ app.use(requireAuth);
 let settings = {
   pollingInterval: 300000, // 5 minutes in milliseconds
   pingInterval: 30000, // 30 seconds in milliseconds
-  dataRetention: 30, // days
+  dataRetention: 365, // days (12 months)
   influxdb: {
     url: 'http://localhost:8086',
     org: 'indobsd',
@@ -473,7 +473,7 @@ app.get('/api/settings', (req, res) => {
   res.json({
     pollingInterval: settings.pollingInterval,
     pollingIntervalSeconds: settings.pollingInterval / 1000,
-    dataRetention: settings.dataRetention || 30
+    dataRetention: settings.dataRetention || 365
   });
 });
 
@@ -504,8 +504,8 @@ app.post('/api/settings', (req, res) => {
     }
     
     if (dataRetentionDays !== undefined) {
-      if (dataRetentionDays < 1 || dataRetentionDays > 365) {
-        return res.status(400).json({ error: 'Data retention must be between 1 and 365 days' });
+      if (dataRetentionDays < 1 || dataRetentionDays > 730) {
+        return res.status(400).json({ error: 'Data retention must be between 1 and 730 days' });
       }
       settings.dataRetention = dataRetentionDays;
     }
@@ -1111,7 +1111,7 @@ function pollSNMP() {
 // Data retention cleanup function
 function cleanupOldData() {
   try {
-    const retentionDays = settings.dataRetention || 30;
+    const retentionDays = settings.dataRetention || 365;
     const cutoffTime = new Date(Date.now() - (retentionDays * 24 * 60 * 60 * 1000));
     const cutoffIso = cutoffTime.toISOString();
     
