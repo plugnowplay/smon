@@ -479,6 +479,54 @@
                 <i class="fas fa-check mr-2"></i>Save Notification Settings
               </button>
             </div>
+
+            <!-- Telegram Bot Configuration -->
+            <div class="space-y-3">
+              <label class="block text-sm font-medium text-gray-300 mb-2">Telegram Bot Notifications</label>
+              
+              <div class="flex items-center justify-between bg-slate-700/30 rounded-lg p-3">
+                <div class="flex items-center gap-3">
+                  <i class="fab fa-telegram text-blue-400"></i>
+                  <div>
+                    <p class="text-sm font-medium text-white">Enable Telegram Notifications</p>
+                    <p class="text-xs text-gray-400">Send alerts to Telegram bot</p>
+                  </div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="telegram-enabled" class="sr-only peer" <%= settings.telegram?.enabled ? 'checked' : '' %>>
+                  <div class="w-11 h-6 bg-slate-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+
+              <div class="bg-slate-700/30 rounded-lg p-3">
+                <label class="block text-sm font-medium text-gray-300 mb-2">Bot Token</label>
+                <input type="password" 
+                       id="telegram-bot-token"
+                       placeholder="123456789:ABCdefGHIjklMNOpqrsTUVwxyz..."
+                       value="<%= settings.telegram?.botToken || '' %>"
+                       class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <p class="text-xs text-gray-500 mt-1">Get token from @BotFather on Telegram</p>
+              </div>
+
+              <div class="bg-slate-700/30 rounded-lg p-3">
+                <label class="block text-sm font-medium text-gray-300 mb-2">Chat ID</label>
+                <input type="text" 
+                       id="telegram-chat-id"
+                       placeholder="-123456789"
+                       value="<%= settings.telegram?.chatId || '' %>"
+                       class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <p class="text-xs text-gray-500 mt-1">Send /start to your bot and check bot logs, or use @userinfobot</p>
+              </div>
+
+              <div class="flex gap-2">
+                <button id="test-telegram-btn" class="flex-1 px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-500 hover:to-blue-600 transition-all font-medium text-sm">
+                  <i class="fab fa-telegram mr-2"></i>Test Connection
+                </button>
+                <button id="save-telegram-btn" class="flex-1 px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-500 hover:to-green-600 transition-all font-medium text-sm">
+                  <i class="fas fa-check mr-2"></i>Save Settings
+                </button>
+              </div>
+            </div>
           </div>
 
           <!-- Divider -->
@@ -1024,6 +1072,91 @@
       } finally {
         saveRetentionBtn.disabled = false;
         saveRetentionBtn.classList.remove('opacity-50');
+      }
+    });
+
+    // Save Telegram settings
+    const saveTelegramBtn = document.getElementById('save-telegram-btn');
+    const testTelegramBtn = document.getElementById('test-telegram-btn');
+
+    saveTelegramBtn.addEventListener('click', async function() {
+      const enabled = document.getElementById('telegram-enabled').checked;
+      const botToken = document.getElementById('telegram-bot-token').value.trim();
+      const chatId = document.getElementById('telegram-chat-id').value.trim();
+
+      if (enabled && (!botToken || !chatId)) {
+        showToast('Bot token and chat ID are required when notifications are enabled', 'warning');
+        return;
+      }
+
+      saveTelegramBtn.disabled = true;
+      saveTelegramBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
+
+      try {
+        const response = await fetch('/api/settings/telegram', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            enabled,
+            botToken,
+            chatId
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to update Telegram settings');
+        }
+
+        showToast('✓ Telegram settings saved successfully', 'success');
+        
+        setTimeout(() => {
+          location.reload();
+        }, 1500);
+      } catch (err) {
+        console.error('Error:', err);
+        showToast('✗ Failed to save Telegram settings', 'error');
+      } finally {
+        saveTelegramBtn.disabled = false;
+        saveTelegramBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Save Settings';
+      }
+    });
+
+    // Test Telegram connection
+    testTelegramBtn.addEventListener('click', async function() {
+      const botToken = document.getElementById('telegram-bot-token').value.trim();
+      const chatId = document.getElementById('telegram-chat-id').value.trim();
+
+      if (!botToken || !chatId) {
+        showToast('Bot token and chat ID are required for testing', 'warning');
+        return;
+      }
+
+      testTelegramBtn.disabled = true;
+      testTelegramBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Testing...';
+
+      try {
+        const response = await fetch('/api/settings/telegram/test', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            botToken,
+            chatId
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Test failed');
+        }
+
+        showToast('✓ Test message sent successfully! Check your Telegram.', 'success');
+      } catch (err) {
+        console.error('Error:', err);
+        showToast(`✗ Test failed: ${err.message}`, 'error');
+      } finally {
+        testTelegramBtn.disabled = false;
+        testTelegramBtn.innerHTML = '<i class="fab fa-telegram mr-2"></i>Test Connection';
       }
     });
 

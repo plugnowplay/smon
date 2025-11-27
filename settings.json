@@ -14,5 +14,10 @@
     "notifyOnTimeout": true,
     "notifyOnHighLatency": true,
     "latencyThreshold": 50
+  },
+  "telegram": {
+    "enabled": false,
+    "botToken": "",
+    "chatId": ""
   }
 }
