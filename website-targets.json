@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "IndoBSD",
+    "url": "https://indobsd.id/",
+    "group": "Internal",
+    "enabled": true
+  },
+  {
+    "id": 2,
+    "name": "PBDjarum",
+    "url": "https://pbdjarum.org/",
+    "group": "External",
+    "enabled": true
+  },
+  {
+    "id": 3,
+    "name": "Repository",
+    "url": "https://repo.indobsd.id",
+    "group": "Internal",
+    "enabled": true
+  }
+]

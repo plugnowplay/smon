@@ -1,5 +1,121 @@
 [
   {
+    "id": 1764431649898,
+    "timestamp": "2025-11-29T15:54:09.898Z",
+    "type": "ping_up",
+    "severity": "info",
+    "source": "OpenDNS",
+    "message": "Ping target \"OpenDNS\" (208.67.222.222) is back online",
+    "details": {
+      "targetId": 4,
+      "targetName": "OpenDNS",
+      "host": "208.67.222.222",
+      "latency": 32.3,
+      "packetLoss": 0
+    }
+  },
+  {
+    "id": 1764431539863,
+    "timestamp": "2025-11-29T15:52:19.863Z",
+    "type": "ping_down",
+    "severity": "error",
+    "source": "OpenDNS",
+    "message": "Ping target \"OpenDNS\" (208.67.222.222) is down",
+    "details": {
+      "targetId": 4,
+      "targetName": "OpenDNS",
+      "host": "208.67.222.222",
+      "packetLoss": 100
+    }
+  },
+  {
+    "id": 1764430809900,
+    "timestamp": "2025-11-29T15:40:09.900Z",
+    "type": "ping_up",
+    "severity": "info",
+    "source": "OpenDNS",
+    "message": "Ping target \"OpenDNS\" (208.67.222.222) is back online",
+    "details": {
+      "targetId": 4,
+      "targetName": "OpenDNS",
+      "host": "208.67.222.222",
+      "latency": 32.6,
+      "packetLoss": 0
+    }
+  },
+  {
+    "id": 1764430699869,
+    "timestamp": "2025-11-29T15:38:19.869Z",
+    "type": "ping_down",
+    "severity": "error",
+    "source": "OpenDNS",
+    "message": "Ping target \"OpenDNS\" (208.67.222.222) is down",
+    "details": {
+      "targetId": 4,
+      "targetName": "OpenDNS",
+      "host": "208.67.222.222",
+      "packetLoss": 100
+    }
+  },
+  {
+    "id": 1764430699864,
+    "timestamp": "2025-11-29T15:38:19.864Z",
+    "type": "flapping_stop",
+    "severity": "info",
+    "source": "OpenDNS",
+    "message": "Ping target \"OpenDNS\" stopped flapping after 292 minutes",
+    "details": {
+      "id": 4,
+      "name": "OpenDNS",
+      "type": "ping",
+      "host": "208.67.222.222",
+      "durationMinutes": 292
+    }
+  },
+  {
+    "id": 1764413169812,
+    "timestamp": "2025-11-29T10:46:09.812Z",
+    "type": "flapping_start",
+    "severity": "warning",
+    "source": "OpenDNS",
+    "message": "Ping target \"OpenDNS\" started flapping",
+    "details": {
+      "id": 4,
+      "name": "OpenDNS",
+      "type": "ping",
+      "host": "208.67.222.222"
+    }
+  },
+  {
+    "id": 1764413049801,
+    "timestamp": "2025-11-29T10:44:09.801Z",
+    "type": "ping_up",
+    "severity": "info",
+    "source": "OpenDNS",
+    "message": "Ping target \"OpenDNS\" (208.67.222.222) is back online",
+    "details": {
+      "targetId": 4,
+      "targetName": "OpenDNS",
+      "host": "208.67.222.222",
+      "latency": 32.7,
+      "packetLoss": 0
+    }
+  },
+  {
+    "id": 1764412939770,
+    "timestamp": "2025-11-29T10:42:19.770Z",
+    "type": "ping_down",
+    "severity": "error",
+    "source": "OpenDNS",
+    "message": "Ping target \"OpenDNS\" (208.67.222.222) is down",
+    "details": {
+      "targetId": 4,
+      "targetName": "OpenDNS",
+      "host": "208.67.222.222",
+      "packetLoss": 100
+    }
+  },
+  {
     "id": 1764342999619,
     "timestamp": "2025-11-28T15:16:39.619Z",
     "type": "ping_up",

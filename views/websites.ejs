@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Monitoring - SMon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1/dist/chartjs-adapter-luxon.umd.min.js"></script>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-gray-100 min-h-screen">
+    <div class="flex h-screen">
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-gradient-to-br from-slate-800 to-slate-900 p-3 rounded-xl border border-slate-700/50 shadow-xl hover:shadow-2xl hover:border-slate-600/70 transition-all duration-300 group">
+            <i class="fas fa-bars text-white group-hover:scale-110 transition-transform duration-200"></i>
+        </button>
+
+        <!-- Mobile Overlay -->
+        <div id="mobile-overlay" class="md:hidden fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm z-30 hidden"></div>
+
+        <!-- Sidebar -->
+        <div id="sidebar" class="w-64 bg-gradient-to-b from-slate-950 to-slate-900 border-r border-slate-700/50 shadow-2xl flex flex-col fixed md:relative inset-y-0 left-0 z-40 transform -translate-x-full md:translate-x-0 transition-all duration-300 ease-in-out">
+            <!-- Header -->
+            <div class="p-6 border-b border-slate-700/50 bg-gradient-to-r from-slate-900/50 to-slate-800/50">
+                <div class="flex items-center gap-3 mb-1">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 group">
+                        <i class="fas fa-chart-line text-white font-bold text-lg group-hover:scale-110 transition-transform duration-200"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold text-white">SMon</h1>
+                        <p class="text-xs text-gray-400">SNMP Monitor</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="flex-1 px-4 py-6 overflow-y-auto">
+                <div class="space-y-2">
+                    <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+                        <i class="fas fa-chart-area w-5 group-hover:scale-110 transition-transform duration-200"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="/monitoring" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+                        <i class="fas fa-gauge-high w-5 group-hover:scale-110 transition-transform duration-200"></i>
+                        <span>Bandwidth Monitor</span>
+                    </a>
+                    <a href="/ping" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+                        <i class="fas fa-network-wired w-5 group-hover:scale-110 transition-transform duration-200"></i>
+                        <span>Ping Monitor</span>
+                    </a>
+                    <a href="/websites" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium transition-all hover:shadow-lg hover:shadow-blue-500/25 hover:scale-[1.02] group">
+                        <i class="fas fa-globe w-5 group-hover:scale-110 transition-transform duration-200"></i>
+                        <span>Website Monitor</span>
+                    </a>
+                    <a href="/devices" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+                        <i class="fas fa-server w-5 group-hover:scale-110 transition-transform duration-200"></i>
+                        <span>Devices</span>
+                    </a>
+                    <a href="/history" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+                        <i class="fas fa-history w-5 group-hover:scale-110 transition-transform duration-200"></i>
+                        <span>History</span>
+                    </a>
+                    <a href="/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+                        <i class="fas fa-cog w-5 group-hover:scale-110 transition-transform duration-200"></i>
+                        <span>Settings</span>
+                    </a>
+                    <a href="/about" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-gradient-to-r hover:from-slate-700 hover:to-slate-800 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] group">
+                        <i class="fas fa-info-circle w-5 group-hover:scale-110 transition-transform duration-200"></i>
+                        <span>About</span>
+                    </a>
+                    <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-gradient-to-r hover:from-red-500/20 hover:to-red-600/20 hover:text-red-300 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] mt-4 group">
+                        <i class="fas fa-sign-out-alt w-5 group-hover:scale-110 transition-transform duration-200"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+
+            <!-- Footer -->
+            <div class="px-4 py-4 border-t border-slate-700/50 bg-gradient-to-r from-slate-900/30 to-slate-800/30">
+                <div class="text-xs text-gray-500 text-center">
+                    <p class="font-medium">SNMP Monitor v2.0</p>
+                    <p class="text-gray-600">Network Intelligence</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-auto md:ml-0">
+            <!-- Top Header -->
+            <div class="bg-gradient-to-r from-slate-950 to-slate-900 border-b border-slate-700/50 px-4 md:px-8 py-6 sticky top-0 z-20 shadow-lg">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <h2 class="text-3xl font-bold text-white flex items-center gap-3">
+                            <i class="fas fa-globe text-green-400"></i>
+                            Website Monitoring
+                        </h2>
+                        <p class="text-gray-400 text-sm mt-1">Monitor website availability and SSL certificates</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button id="add-website-btn" class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-green-500/25 hover:scale-105 flex items-center gap-2">
+                            <i class="fas fa-plus"></i>
+                            Add Website
+                        </button>
+                        <button id="refresh-all-btn" class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25 hover:scale-105 flex items-center gap-2">
+                            <i class="fas fa-sync-alt"></i>
+                            Refresh All
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="p-4 md:p-8">
+                <!-- Website Targets -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    <% Object.keys(groupedTargets).forEach(group => { %>
+                        <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 shadow-xl overflow-hidden">
+                            <div class="bg-gradient-to-r from-slate-700 to-slate-800 px-4 py-3 border-b border-slate-600/50">
+                                <h3 class="text-lg font-semibold text-white flex items-center gap-2">
+                                    <i class="fas fa-folder text-blue-400"></i>
+                                    <%= group %>
+                                </h3>
+                            </div>
+                            <div class="p-4 space-y-3">
+                                <% groupedTargets[group].forEach(target => { %>
+                                    <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-700/30 hover:border-slate-600/50 transition-all duration-300 group">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-3 h-3 rounded-full bg-gray-500" id="status-<%= target.id %>"></div>
+                                                <h4 class="font-medium text-white group-hover:text-blue-300 transition-colors">
+                                                    <%= target.name %>
+                                                </h4>
+                                            </div>
+                                            <div class="flex items-center gap-2">
+                                                <button class="test-btn text-blue-400 hover:text-blue-300 transition-colors p-1" data-target-id="<%= target.id %>">
+                                                    <i class="fas fa-play text-sm"></i>
+                                                </button>
+                                                <button class="toggle-btn text-yellow-400 hover:text-yellow-300 transition-colors p-1" data-target-id="<%= target.id %>">
+                                                    <i class="fas fa-<%= target.enabled ? 'pause' : 'play' %> text-sm"></i>
+                                                </button>
+                                                <button class="delete-btn text-red-400 hover:text-red-300 transition-colors p-1" data-target-id="<%= target.id %>">
+                                                    <i class="fas fa-trash text-sm"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="text-sm text-gray-400 mb-1">
+                                            <i class="fas fa-link text-xs mr-1"></i>
+                                            <%= target.url %>
+                                        </div>
+                                        <div class="flex justify-between items-center text-xs">
+                                            <span class="text-gray-500" id="response-time-<%= target.id %>">Response: --ms</span>
+                                            <span class="text-gray-500" id="ssl-status-<%= target.id %>">SSL: --</span>
+                                        </div>
+                                    </div>
+                                <% }); %>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 shadow-xl p-6 mb-8">
+                    <h3 class="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+                        <i class="fas fa-chart-line text-blue-400"></i>
+                        Response Time History
+                    </h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <canvas id="responseTimeChart" width="400" height="200"></canvas>
+                        </div>
+                        <div>
+                            <canvas id="uptimeChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Website Modal -->
+    <div id="add-website-modal" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm hidden z-50 flex items-center justify-center">
+        <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700/50 shadow-2xl p-6 w-full max-w-md mx-4">
+            <h3 class="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+                <i class="fas fa-plus text-green-400"></i>
+                Add Website Target
+            </h3>
+            <form id="add-website-form">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Name</label>
+                    <input type="text" id="website-name" class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-300 mb-2">URL</label>
+                    <input type="url" id="website-url" class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500" placeholder="https://example.com" required>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Group</label>
+                    <input type="text" id="website-group" class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500" placeholder="Web Services" required>
+                </div>
+                <div class="flex gap-3">
+                    <button type="button" id="cancel-add-btn" class="flex-1 bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded-lg transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit" class="flex-1 bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg transition-colors">
+                        Add Website
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu functionality
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileOverlay = document.getElementById('mobile-overlay');
+        const sidebar = document.getElementById('sidebar');
+
+        mobileMenuButton.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+            mobileOverlay.classList.toggle('hidden');
+        });
+
+        mobileOverlay.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+            mobileOverlay.classList.add('hidden');
+        });
+
+        // Website monitoring functionality
+        let selectedTargetId = null;
+        let responseTimeChart = null;
+        let uptimeChart = null;
+
+        // Initialize charts
+        function initCharts() {
+            const ctx1 = document.getElementById('responseTimeChart').getContext('2d');
+            responseTimeChart = new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'Response Time (ms)',
+                        borderColor: 'rgb(59, 130, 246)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        data: []
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'hour'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            const ctx2 = document.getElementById('uptimeChart').getContext('2d');
+            uptimeChart = new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'Uptime %',
+                        borderColor: 'rgb(34, 197, 94)',
+                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                        data: []
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'hour'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        // Load website targets
+        async function loadWebsiteTargets() {
+            try {
+                const response = await fetch('/api/website-targets');
+                const targets = await response.json();
+
+                targets.forEach(target => {
+                    updateTargetStatus(target.id, null);
+                });
+            } catch (error) {
+                console.error('Error loading website targets:', error);
+            }
+        }
+
+        // Update target status display
+        function updateTargetStatus(targetId, data) {
+            const statusElement = document.getElementById(`status-${targetId}`);
+            const responseTimeElement = document.getElementById(`response-time-${targetId}`);
+            const sslStatusElement = document.getElementById(`ssl-status-${targetId}`);
+
+            if (!data) {
+                statusElement.className = 'w-3 h-3 rounded-full bg-gray-500';
+                responseTimeElement.textContent = 'Response: --ms';
+                sslStatusElement.textContent = 'SSL: --';
+                return;
+            }
+
+            if (data.up) {
+                statusElement.className = 'w-3 h-3 rounded-full bg-green-500';
+                responseTimeElement.textContent = `Response: ${data.responseTime}ms`;
+                sslStatusElement.textContent = data.sslValid ? 'SSL: Valid' : 'SSL: Invalid';
+            } else {
+                statusElement.className = 'w-3 h-3 rounded-full bg-red-500';
+                responseTimeElement.textContent = 'Response: --ms';
+                sslStatusElement.textContent = 'SSL: --';
+            }
+        }
+
+        // Test website
+        async function testWebsite(targetId) {
+            try {
+                const response = await fetch('/api/website-test', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ targetId })
+                });
+                const result = await response.json();
+                updateTargetStatus(targetId, result);
+                return result;
+            } catch (error) {
+                console.error('Error testing website:', error);
+            }
+        }
+
+        // Toggle website monitoring
+        async function toggleWebsite(targetId) {
+            try {
+                const response = await fetch(`/api/website-targets/${targetId}/toggle`, {
+                    method: 'PATCH'
+                });
+                const result = await response.json();
+                if (result.success) {
+                    location.reload();
+                }
+            } catch (error) {
+                console.error('Error toggling website:', error);
+            }
+        }
+
+        // Delete website
+        async function deleteWebsite(targetId) {
+            if (!confirm('Are you sure you want to delete this website target?')) return;
+
+            try {
+                const response = await fetch(`/api/website-targets/${targetId}`, {
+                    method: 'DELETE'
+                });
+                const result = await response.json();
+                if (result.success) {
+                    location.reload();
+                }
+            } catch (error) {
+                console.error('Error deleting website:', error);
+            }
+        }
+
+        // Add website
+        async function addWebsite(name, url, group) {
+            try {
+                const response = await fetch('/api/website-targets', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, url, group })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    location.reload();
+                }
+            } catch (error) {
+                console.error('Error adding website:', error);
+            }
+        }
+
+        // Load chart data
+        async function loadChartData(targetId) {
+            try {
+                const response = await fetch(`/api/website-history/${targetId}`);
+                const data = await response.json();
+
+                // Update response time chart
+                const responseTimeData = data.data.map(item => ({
+                    x: new Date(item.time),
+                    y: item.responseTime || 0
+                }));
+                responseTimeChart.data.datasets[0].data = responseTimeData;
+                responseTimeChart.update();
+
+                // Calculate uptime percentage
+                const totalChecks = data.data.length;
+                const upChecks = data.data.filter(item => item.up).length;
+                const uptimePercent = totalChecks > 0 ? (upChecks / totalChecks) * 100 : 0;
+
+                // Create uptime data (constant line)
+                const uptimeData = data.data.map(item => ({
+                    x: new Date(item.time),
+                    y: uptimePercent
+                }));
+                uptimeChart.data.datasets[0].data = uptimeData;
+                uptimeChart.update();
+
+            } catch (error) {
+                console.error('Error loading chart data:', error);
+            }
+        }
+
+        // Event listeners
+        document.getElementById('add-website-btn').addEventListener('click', () => {
+            document.getElementById('add-website-modal').classList.remove('hidden');
+        });
+
+        document.getElementById('cancel-add-btn').addEventListener('click', () => {
+            document.getElementById('add-website-modal').classList.add('hidden');
+        });
+
+        document.getElementById('add-website-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('website-name').value;
+            const url = document.getElementById('website-url').value;
+            const group = document.getElementById('website-group').value;
+            addWebsite(name, url, group);
+        });
+
+        document.getElementById('refresh-all-btn').addEventListener('click', () => {
+            loadWebsiteTargets();
+        });
+
+        // Delegate events for dynamic elements
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('test-btn') || e.target.closest('.test-btn')) {
+                const targetId = e.target.closest('.test-btn').dataset.targetId;
+                testWebsite(parseInt(targetId));
+            }
+
+            if (e.target.classList.contains('toggle-btn') || e.target.closest('.toggle-btn')) {
+                const targetId = e.target.closest('.toggle-btn').dataset.targetId;
+                toggleWebsite(parseInt(targetId));
+            }
+
+            if (e.target.classList.contains('delete-btn') || e.target.closest('.delete-btn')) {
+                const targetId = e.target.closest('.delete-btn').dataset.targetId;
+                deleteWebsite(parseInt(targetId));
+            }
+        });
+
+        // Initialize
+        initCharts();
+        loadWebsiteTargets();
+
+        // Auto-select first target for charts
+        setTimeout(() => {
+            const firstTarget = document.querySelector('.test-btn');
+            if (firstTarget) {
+                selectedTargetId = firstTarget.dataset.targetId;
+                loadChartData(selectedTargetId);
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

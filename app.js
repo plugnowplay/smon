@@ -7,6 +7,8 @@ const ping = require('ping');
 const TelegramBot = require('node-telegram-bot-api');
 const nodemailer = require('nodemailer');
 const os = require('os');
+const https = require('https');
+const http = require('http');
 
 const app = express();
 const port = 3000;
@@ -372,6 +374,66 @@ function notifyPingStatus(targetId, targetName, targetHost, status, latency = nu
   if (shouldNotify && message) {
     sendTelegramMessage(message);
     notifyPingStatusEmail(targetId, targetName, targetHost, status, latency, packetLoss);
+  }
+}
+
+function notifyWebsiteStatus(targetId, targetName, targetUrl, status, responseTime = null, sslDaysRemaining = null) {
+  if (!settings.telegram || !settings.telegram.enabled) return;
+
+  const timestamp = new Date().toLocaleString('id-ID');
+  let message = '';
+  let shouldNotify = false;
+
+  if (status === 'down' && settings.website.notifyOnDown) {
+    message = `🔴 <b>Website Down Alert</b>\n\n` +
+              `🌐 <b>Website:</b> ${targetName} (${targetUrl})\n` +
+              `⏰ <b>Time:</b> ${timestamp}\n` +
+              `❌ <b>Status:</b> Website is unreachable\n` +
+              `🚨 <b>Alert:</b> Website is down!`;
+    shouldNotify = true;
+    
+    // Log website down event
+    logEvent('website_down', 'error', targetName, `Website "${targetName}" (${targetUrl}) is down`, {
+      targetId: targetId,
+      targetName: targetName,
+      url: targetUrl
+    });
+  } else if (status === 'up' && settings.website.notifyOnUp) {
+    message = `🟢 <b>Website Up Alert</b>\n\n` +
+              `🌐 <b>Website:</b> ${targetName} (${targetUrl})\n` +
+              `⏰ <b>Time:</b> ${timestamp}\n` +
+              `✅ <b>Status:</b> Website is back online\n` +
+              `⚡ <b>Response Time:</b> ${responseTime}ms\n` +
+              `🎉 <b>Alert:</b> Website recovered!`;
+    shouldNotify = true;
+    
+    // Log website up event
+    logEvent('website_up', 'info', targetName, `Website "${targetName}" (${targetUrl}) is back online`, {
+      targetId: targetId,
+      targetName: targetName,
+      url: targetUrl,
+      responseTime: responseTime
+    });
+  } else if (status === 'ssl_expiry_warning' && settings.website.notifyOnSslExpiry) {
+    message = `🔐 <b>SSL Certificate Expiry Warning</b>\n\n` +
+              `🌐 <b>Website:</b> ${targetName} (${targetUrl})\n` +
+              `⏰ <b>Time:</b> ${timestamp}\n` +
+              `⏰ <b>Days Remaining:</b> ${sslDaysRemaining} days\n` +
+              `🚨 <b>Alert:</b> SSL certificate expires soon!`;
+    shouldNotify = true;
+    
+    // Log SSL expiry warning event
+    logEvent('ssl_expiry_warning', 'warning', targetName, `SSL certificate for "${targetName}" (${targetUrl}) expires in ${sslDaysRemaining} days`, {
+      targetId: targetId,
+      targetName: targetName,
+      url: targetUrl,
+      daysRemaining: sslDaysRemaining
+    });
+  }
+
+  if (shouldNotify && message) {
+    sendTelegramMessage(message);
+    // TODO: Add email notification for website status
   }
 }
 
@@ -993,6 +1055,23 @@ if (fs.existsSync(pingTargetsFile)) {
   fs.writeFileSync(pingTargetsFile, JSON.stringify(pingTargets, null, 2));
 }
 
+// Website monitoring configuration
+let websiteTargets = [
+  { id: 1, name: 'Google', url: 'https://www.google.com', group: 'Search Engines', enabled: true },
+  { id: 2, name: 'GitHub', url: 'https://github.com', group: 'Development', enabled: true }
+];
+
+// Website status tracking for notifications
+let websiteStatusHistory = {}; // Track previous website status for each target
+
+// Load or create website targets file
+const websiteTargetsFile = './website-targets.json';
+if (fs.existsSync(websiteTargetsFile)) {
+  websiteTargets = JSON.parse(fs.readFileSync(websiteTargetsFile, 'utf8'));
+} else {
+  fs.writeFileSync(websiteTargetsFile, JSON.stringify(websiteTargets, null, 2));
+}
+
 // Helper function to save config
 function saveConfig() {
   fs.writeFileSync('./config.json', JSON.stringify(config, null, 2));
@@ -1009,6 +1088,12 @@ function saveSettings() {
 function savePingTargets() {
   fs.writeFileSync(pingTargetsFile, JSON.stringify(pingTargets, null, 2));
   console.log('Ping targets saved');
+}
+
+// Helper function to save website targets
+function saveWebsiteTargets() {
+  fs.writeFileSync(websiteTargetsFile, JSON.stringify(websiteTargets, null, 2));
+  console.log('Website targets saved');
 }
 
 // Helper function to save ping history
@@ -1243,6 +1328,24 @@ app.get('/ping', (req, res) => {
   });
 });
 
+// Route for website monitoring page
+app.get('/websites', (req, res) => {
+  // Group website targets by group
+  const groupedTargets = {};
+  websiteTargets.forEach(target => {
+    if (!groupedTargets[target.group]) {
+      groupedTargets[target.group] = [];
+    }
+    groupedTargets[target.group].push(target);
+  });
+
+  res.render('websites', { 
+    websiteTargets: websiteTargets,
+    groupedTargets: groupedTargets,
+    settings: settings
+  });
+});
+
 // API to get ping targets
 app.get('/api/ping-targets', (req, res) => {
   res.json(pingTargets);
@@ -1329,6 +1432,173 @@ app.patch('/api/ping-targets/:id/toggle', (req, res) => {
   } catch (err) {
     console.error('Error toggling ping target:', err);
     res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// API to get website targets
+app.get('/api/website-targets', (req, res) => {
+  res.json(websiteTargets);
+});
+
+// API to add website target
+app.post('/api/website-targets', (req, res) => {
+  try {
+    const { name, url, group } = req.body;
+    
+    if (!name || !url || !group) {
+      return res.status(400).json({ error: 'Name, URL, and group are required' });
+    }
+    
+    // Check if URL already exists
+    const existingTarget = websiteTargets.find(target => target.url === url);
+    if (existingTarget) {
+      return res.status(400).json({ error: 'URL already exists' });
+    }
+    
+    const newTarget = {
+      id: Math.max(...websiteTargets.map(t => t.id), 0) + 1,
+      name: name.trim(),
+      url: url.trim(),
+      group: group.trim(),
+      enabled: true
+    };
+    
+    websiteTargets.push(newTarget);
+    saveWebsiteTargets();
+    
+    res.json({
+      success: true,
+      message: 'Website target added successfully',
+      target: newTarget
+    });
+  } catch (err) {
+    console.error('Error adding website target:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// API to delete website target
+app.delete('/api/website-targets/:id', (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const index = websiteTargets.findIndex(target => target.id === id);
+    
+    if (index === -1) {
+      return res.status(404).json({ error: 'Website target not found' });
+    }
+    
+    websiteTargets.splice(index, 1);
+    saveWebsiteTargets();
+    
+    res.json({
+      success: true,
+      message: 'Website target deleted successfully'
+    });
+  } catch (err) {
+    console.error('Error deleting website target:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// API to toggle website target status
+app.patch('/api/website-targets/:id/toggle', (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const target = websiteTargets.find(target => target.id === id);
+    
+    if (!target) {
+      return res.status(404).json({ error: 'Website target not found' });
+    }
+    
+    target.enabled = !target.enabled;
+    saveWebsiteTargets();
+    
+    res.json({
+      success: true,
+      message: 'Website target status updated successfully',
+      target: target
+    });
+  } catch (err) {
+    console.error('Error toggling website target:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// API to perform website test
+app.post('/api/website-test', (req, res) => {
+  const { targetId } = req.body;
+
+  if (!targetId) {
+    return res.status(400).json({ error: 'Target ID is required' });
+  }
+
+  const target = websiteTargets.find(t => t.id === parseInt(targetId));
+  if (!target) {
+    return res.status(404).json({ error: 'Target not found' });
+  }
+
+  checkWebsiteStatus(target).then(result => {
+    addWebsiteToDatabase(target.id, result);
+    res.json({
+      targetId: target.id,
+      targetName: target.name,
+      url: target.url,
+      up: result.up,
+      responseTime: result.responseTime,
+      statusCode: result.statusCode,
+      sslExpiry: result.sslExpiry,
+      sslValid: result.sslValid
+    });
+  }).catch(err => {
+    console.error(`[WEBSITE API] Error testing website ${target.name}:`, err);
+    res.status(500).json({ error: 'Website test failed' });
+  });
+});
+
+// API to get website history
+app.get('/api/website-history/:targetId', async (req, res) => {
+  const { targetId } = req.params;
+
+  try {
+    const queryApi = client.getQueryApi(settings.influxdb.org);
+
+    const fluxQuery = `
+      from(bucket: "${settings.influxdb.bucket}")
+      |> range(start: -30d)
+      |> filter(fn: (r) => r._measurement == "website_metric")
+      |> filter(fn: (r) => r.target_id == "${targetId}")
+      |> filter(fn: (r) => r._field == "up" or r._field == "response_time" or r._field == "status_code" or r._field == "ssl_expiry" or r._field == "ssl_valid")
+      |> sort(columns: ["_time"])
+    `;
+
+    const result = await queryApi.collectRows(fluxQuery);
+
+    // Process the data
+    const data = {};
+    result.forEach(row => {
+      const time = new Date(row._time).getTime();
+      if (!data[time]) {
+        data[time] = {
+          time: time,
+          up: null,
+          responseTime: null,
+          statusCode: null,
+          sslExpiry: null,
+          sslValid: null
+        };
+      }
+      data[time][row._field] = row._value;
+    });
+
+    const processedData = Object.values(data).sort((a, b) => a.time - b.time);
+
+    res.json({
+      targetId: parseInt(targetId),
+      data: processedData
+    });
+  } catch (err) {
+    console.error('[WEBSITE API] Error fetching website history:', err);
+    res.status(500).json({ error: 'Failed to fetch website history' });
   }
 });
 
@@ -1973,6 +2243,54 @@ app.post('/api/settings/flapping', (req, res) => {
   } catch (err) {
     console.error('Error saving flapping settings:', err);
     res.status(500).json({ error: 'Failed to save flapping settings: ' + err.message });
+  }
+});
+
+// API to update website monitoring settings
+app.post('/api/settings/website', (req, res) => {
+  try {
+    const { enabled, interval, timeout, notifyOnDown, notifyOnUp, notifyOnSslExpiry, sslExpiryWarningDays } = req.body;
+    
+    if (!settings.website) {
+      settings.website = {};
+    }
+    
+    settings.website.enabled = enabled !== undefined ? enabled : true;
+    
+    if (interval !== undefined) {
+      if (interval < 30000) {
+        return res.status(400).json({ error: 'Monitoring interval must be at least 30 seconds' });
+      }
+      settings.website.interval = interval;
+    }
+    
+    if (timeout !== undefined) {
+      if (timeout < 1000) {
+        return res.status(400).json({ error: 'Request timeout must be at least 1 second' });
+      }
+      settings.website.timeout = timeout;
+    }
+    
+    settings.website.notifyOnDown = notifyOnDown !== undefined ? notifyOnDown : true;
+    settings.website.notifyOnUp = notifyOnUp !== undefined ? notifyOnUp : true;
+    settings.website.notifyOnSslExpiry = notifyOnSslExpiry !== undefined ? notifyOnSslExpiry : true;
+    
+    if (sslExpiryWarningDays !== undefined) {
+      if (sslExpiryWarningDays < 1 || sslExpiryWarningDays > 90) {
+        return res.status(400).json({ error: 'SSL expiry warning must be between 1 and 90 days' });
+      }
+      settings.website.sslExpiryWarningDays = sslExpiryWarningDays;
+    }
+    
+    saveSettings();
+    
+    res.json({
+      success: true,
+      website: settings.website
+    });
+  } catch (err) {
+    console.error('Error updating website settings:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
@@ -2909,6 +3227,186 @@ function startPingMonitoring() {
 // Start ping monitoring
 setInterval(startPingMonitoring, settings.pingInterval);
 
+// Start website monitoring
+setInterval(startWebsiteMonitoring, settings.website.interval);
+
+// Website monitoring function
+function startWebsiteMonitoring() {
+  console.log('[WEBSITE] Starting website monitoring for', websiteTargets.length, 'targets');
+
+  websiteTargets.forEach(target => {
+    if (!target.enabled) return;
+
+    checkWebsiteStatus(target).then(result => {
+      // Check for status changes and send notifications
+      const previousStatus = websiteStatusHistory[target.id];
+      const isUp = result.up;
+      const responseTime = result.responseTime;
+      const sslExpiry = result.sslExpiry;
+      const sslValid = result.sslValid;
+
+      // Initialize status history if not exists
+      if (!websiteStatusHistory[target.id]) {
+        websiteStatusHistory[target.id] = {
+          up: isUp,
+          lastResponseTime: responseTime,
+          lastSslExpiry: sslExpiry,
+          lastSslValid: sslValid,
+          lastCheck: Date.now()
+        };
+      }
+
+      // Check for status changes
+      if (previousStatus) {
+        // Website went from down to up
+        if (!previousStatus.up && isUp) {
+          notifyWebsiteStatus(target.id, target.name, target.url, 'up', responseTime);
+        }
+        // Website went from up to down
+        else if (previousStatus.up && !isUp) {
+          notifyWebsiteStatus(target.id, target.name, target.url, 'down', responseTime);
+        }
+      }
+
+      // Check SSL expiry warnings
+      if (isUp && sslExpiry && settings.website.notifyOnSslExpiry) {
+        const daysUntilExpiry = Math.ceil((sslExpiry - Date.now()) / (1000 * 60 * 60 * 24));
+        if (daysUntilExpiry <= settings.website.sslExpiryWarningDays) {
+          notifyWebsiteStatus(target.id, target.name, target.url, 'ssl_expiry_warning', responseTime, daysUntilExpiry);
+        }
+      }
+
+      // Update status history
+      websiteStatusHistory[target.id] = {
+        up: isUp,
+        lastResponseTime: responseTime,
+        lastSslExpiry: sslExpiry,
+        lastSslValid: sslValid,
+        lastCheck: Date.now()
+      };
+
+      addWebsiteToDatabase(target.id, result);
+    }).catch(err => {
+      console.error(`[WEBSITE] Error checking ${target.name} (${target.url}):`, err);
+
+      // Check for status changes on error
+      const previousStatus = websiteStatusHistory[target.id];
+      if (previousStatus && previousStatus.up) {
+        // Website was up but now has error (treat as down)
+        notifyWebsiteStatus(target.id, target.name, target.url, 'down', 0);
+      }
+
+      // Update status history for failed check
+      websiteStatusHistory[target.id] = {
+        up: false,
+        lastResponseTime: 0,
+        lastSslExpiry: null,
+        lastSslValid: false,
+        lastCheck: Date.now()
+      };
+
+      // Still record the failed check
+      addWebsiteToDatabase(target.id, {
+        up: false,
+        responseTime: 0,
+        sslExpiry: null,
+        sslValid: false,
+        error: err.message
+      });
+    });
+  });
+}
+
+// Function to check website status and SSL certificate
+function checkWebsiteStatus(target) {
+  return new Promise((resolve, reject) => {
+    const url = new URL(target.url);
+    const startTime = Date.now();
+
+    const options = {
+      hostname: url.hostname,
+      port: url.port || (url.protocol === 'https:' ? 443 : 80),
+      path: url.pathname + url.search,
+      method: 'GET',
+      timeout: settings.website.timeout || 10000,
+      rejectUnauthorized: false // Allow self-signed certificates for checking
+    };
+
+    const req = (url.protocol === 'https:' ? https : http).request(options, (res) => {
+      const responseTime = Date.now() - startTime;
+      let sslExpiry = null;
+      let sslValid = false;
+
+      // Check SSL certificate if HTTPS
+      if (url.protocol === 'https:' && res.socket && res.socket.getPeerCertificate) {
+        try {
+          const cert = res.socket.getPeerCertificate();
+          if (cert && cert.valid_to) {
+            sslExpiry = new Date(cert.valid_to).getTime();
+            sslValid = Date.now() < sslExpiry;
+          }
+        } catch (sslErr) {
+          console.warn(`[WEBSITE] SSL check failed for ${target.url}:`, sslErr.message);
+        }
+      }
+
+      resolve({
+        up: res.statusCode >= 200 && res.statusCode < 400,
+        responseTime: responseTime,
+        statusCode: res.statusCode,
+        sslExpiry: sslExpiry,
+        sslValid: sslValid
+      });
+    });
+
+    req.on('error', (err) => {
+      reject(err);
+    });
+
+    req.on('timeout', () => {
+      req.destroy();
+      reject(new Error('Request timeout'));
+    });
+
+    req.end();
+  });
+}
+
+// Function to add website result to database
+function addWebsiteToDatabase(targetId, result) {
+  try {
+    const writeApi = client.getWriteApi(settings.influxdb.org, settings.influxdb.bucket);
+    const websitePoint = new Point('website_metric')
+      .tag('target_id', targetId.toString())
+      .tag('target_name', websiteTargets.find(t => t.id === targetId)?.name || 'unknown')
+      .tag('target_url', websiteTargets.find(t => t.id === targetId)?.url || 'unknown')
+      .timestamp(new Date())
+      .booleanField('up', result.up)
+      .floatField('response_time', result.responseTime || 0);
+
+    if (result.statusCode) {
+      websitePoint.intField('status_code', result.statusCode);
+    }
+
+    if (result.sslExpiry) {
+      websitePoint.intField('ssl_expiry', result.sslExpiry);
+    }
+
+    if (result.sslValid !== undefined) {
+      websitePoint.booleanField('ssl_valid', result.sslValid);
+    }
+
+    writeApi.writePoint(websitePoint);
+    writeApi.close().then(() => {
+      console.log(`[WEBSITE] Data written for ${websiteTargets.find(t => t.id === targetId)?.name}`);
+    }).catch(err => {
+      console.error('InfluxDB website write error:', err);
+    });
+  } catch (err) {
+    console.error('Error creating website write API:', err);
+  }
+}
+
 // API endpoint for ping test
 app.post('/api/ping-test', (req, res) => {
   const { targetId } = req.body;
@@ -3229,6 +3727,9 @@ app.listen(port, () => {
 
   // Start ping monitoring immediately
   startPingMonitoring();
+
+  // Start website monitoring immediately
+  startWebsiteMonitoring();
 });
 
 
