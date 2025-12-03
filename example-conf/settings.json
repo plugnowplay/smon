@@ -68,5 +68,12 @@
     "notifyOnUp": true,
     "notifyOnSslExpiry": false,
     "sslExpiryWarningDays": 30
+  },
+    "authentication": {
+    "enabled": true,
+    "username": "admin",
+    "password": "admin123",
+    "sessionTimeout": 86400000,
+    "comment": "Change username and password here for security. Session timeout in milliseconds (86400000 = 24 hours)"
   }
 }
