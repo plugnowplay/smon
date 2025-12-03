@@ -2042,12 +2042,17 @@ app.get('/login', (req, res) => {
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
 
-  // Simple authentication (you can replace this with proper authentication)
-  if (username === 'admin' && password === 'admin123') {
+  // Use credentials from settings.json (configurable)
+  const authConfig = settings.authentication || { enabled: true, username: 'admin', password: 'admin123' };
+  const sessionTimeout = authConfig.sessionTimeout || (24 * 60 * 60 * 1000); // Default 24 hours
+  
+  if (authConfig.enabled && username === authConfig.username && password === authConfig.password) {
     // Set session or cookie for authentication
-    res.cookie('authenticated', 'true', { maxAge: 24 * 60 * 60 * 1000 }); // 24 hours
+    res.cookie('authenticated', 'true', { maxAge: sessionTimeout });
+    console.log(`[AUTH] User '${username}' logged in successfully`);
     res.redirect('/');
   } else {
+    console.warn(`[AUTH] Failed login attempt with username: ${username}`);
     res.render('login', {
       error: 'Invalid username or password',
       success: null
